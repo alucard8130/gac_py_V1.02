@@ -309,12 +309,10 @@ class PantallaPrincipal():
         self.pp.btnEntrar.setVisible(True)
         self.pp.btnNewUser.setVisible(True)
         self.pp.txtPassword.setVisible(True)
-        #self.pp.txtUsuario.setText("")
-        #self.pp.txtPassword.setText("")
+        self.pp.txtUsuario.setText("")
+        self.pp.txtPassword.setText("")
         self.pp.txtNameUser.setText("")
         self.pp.toolButton.setVisible(True)
-        self.pp.txtUsuario.setText("administrador")
-        self.pp.txtPassword.setText("adMin_81@")
         
     def ocultar_panel(self):
         self.pp.btnIngresar.setVisible(True)
