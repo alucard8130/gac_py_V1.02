@@ -394,8 +394,8 @@ class PantallaPrincipal():
         self.pp.txtNameUser.setVisible(True)
         self.pp.lblRecPassword.setVisible(False)
         self.pp.txtNameUser.setFocus()
-        # self.pp.txtUsuario.setText("")
-        # self.pp.txtPassword.setText("")
+        self.pp.txtUsuario.setText("")
+        self.pp.txtPassword.setText("")
         
         nombre= self.pp.txtNameUser.text()
         usuario = self.pp.txtUsuario.text()
