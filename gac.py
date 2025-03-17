@@ -1,7 +1,9 @@
 from datetime import datetime
 import csv
 import sys
-import os 
+import os
+#from msilib.schema import InstallExecuteSequence
+
 from PyQt6 import uic
 from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QLineEdit, QApplication
 from data import ctasbancos
@@ -309,12 +311,12 @@ class PantallaPrincipal():
         self.pp.btnEntrar.setVisible(True)
         self.pp.btnNewUser.setVisible(True)
         self.pp.txtPassword.setVisible(True)
-        self.pp.txtUsuario.setText("")
-        self.pp.txtPassword.setText("")
+        #self.pp.txtUsuario.setText("")
+        #self.pp.txtPassword.setText("")
         self.pp.txtNameUser.setText("")
         self.pp.toolButton.setVisible(True)
-        #self.pp.txtUsuario.setText("administrador")
-        #self.pp.txtPassword.setText("adMin_81@")
+        self.pp.txtUsuario.setText("administrador")
+        self.pp.txtPassword.setText("adMin_81@")
         
     def ocultar_panel(self):
         self.pp.btnIngresar.setVisible(True)
@@ -2117,25 +2119,28 @@ class PantallaPrincipal():
         self.femp.btnGuardar.clicked.connect(self.registrar_empleado)
         self.femp.btnSalir.clicked.connect(self.salir_form_empleados)
         
-    ##pendiente programar form empleados y sus metodos
+    
     def registrar_empleado(self):   
         m = QMessageBox()
         m.setIcon(QMessageBox.Icon.Information)
         m.setWindowTitle("Registro Empleado")
         m.setStandardButtons(QMessageBox.StandardButton.Ok)
 
-        if self.femp.txtNombreCliente.text() == "":
+        if self.femp.txtNombres.text() == "":
             m.setText("Captura nombre del empleado")
-            self.femp.txtNombreCliente.setFocus()
+            self.femp.txtNombres.setFocus()
+        elif self.femp.txtApellidoP.text()=="":
+            m.setText("Captura apellido paterno del empleado")
+            self.femp.txtApellidoP.setFocus()
+        elif self.femp.txtApellidoM.text() == "":        
+            m.setText("Captura apellido materno del empleado")
+            self.femp.txtApellidoM.setFocus()
         elif self.femp.txtRFC.text() == "":
             m.setText("Captura RFC del empleado")
             self.femp.txtRFC.setFocus()
         elif self.femp.txtCURP.text() == "":
             m.setText("Captura CURP del empleado")
             self.femp.txtCURP.setFocus()
-        elif self.femp.txtDireccion.text() == "":
-            m.setText("Captura dirección del empleado")
-            self.femp.txtDireccion.setFocus()
         elif self.femp.txtCel.text() == "":
             m.setText("Captura teléfono del empleado")
             self.femp.txtCel.setFocus()
@@ -2143,19 +2148,41 @@ class PantallaPrincipal():
             m.setText("Captura solo números en el teléfono")
             self.femp.txtCel.setText("")
             self.femp.txtCel.setFocus()
-        elif self.femp.txtEmail.text() == "":
-            m.setText("Captura email del empleado")
-            self.femp.txtEmail.setFocus()
+        elif self.femp.txtNSS.text()=="":
+            m.setText("Captura el numero de seguridad social")
+            self.femp.txtNSS.setFocus()
+        elif self.femp.cmbPuesto.currentIndex() == 0:
+            m.setText("Seleccciona una opcion")
+            self.femp.cmbPuesto.setFocus()
+        elif self.femp.cmbDepto.currentIndex() == 0:
+            m.setText("Seleccciona una opcion")
+            self.femp.cmbDepto.setFocus()
+        elif self.femp.txtSueldoD.text() == "":
+            m.setText("Captura el sueldo del empleado")
+            self.femp.txtSueldoD.setFocus()
+        elif not self.femp.txtSueldoD.text().replace(".","",1).isnumeric():
+            m.setText("Captura un importe correcto")
+            self.femp.txtSueldoD.setFocus()
         else:
             regEmpleado = RegEmpleado(
-                nombre=self.femp.txtNombreCliente.text().upper(),
+                nombres=self.femp.txtNombres.text().upper(),
+                apellido_pat=self.femp.txtApellidoP.text().upper(),
+                apellido_mat=self.femp.txtApellidoM.text().upper(),
                 rfc=self.femp.txtRFC.text().upper(),
                 curp=self.femp.txtCURP.text().upper(),
-                direccion=self.femp.txtDireccion.text(),
+                numss=self.femp.txtNSS.text().upper(),
+                f_nacimiento=self.femp.dateBoxFN.date().toString("yyyy-MM-dd"),
+                puesto=self.femp.cmbPuesto.currentText(),
+                departamento=self.femp.cmbDepto.currentText(),
+                sueldo=float(self.femp.txtSueldoD.text()),
+                direccion=self.femp.txtDireccion.toPlainText(),
                 telefono=self.femp.txtCel.text(),
                 email=self.femp.txtEmail.text().lower(),
+                f_ingreso=self.femp.dateBoxFI.date().toString("yyyy-MM-dd"),
+                f_baja="",
+                status=True,
                 usuario=self.pp.lblName_User.text(),
-                fReg=current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                f_reg=current_datetime.strftime("%Y-%m-%d %H:%M:%S")
             )
             objData = RegEmpleadoData()
             if objData.registrar(regEmpleado):
@@ -2167,12 +2194,17 @@ class PantallaPrincipal():
         m.exec()
 
     def limpiar_campos_femp(self):
-        self.femp.txtNombreCliente.setText("")
+        self.femp.txtNombres.setText("")
+        self.femp.txtApellidoM.setText("")
+        self.femp.txtApellidoP.setText("")
         self.femp.txtRFC.setText("")
         self.femp.txtCURP.setText("")
         self.femp.txtDireccion.setText("")
         self.femp.txtCel.setText("")
         self.femp.txtEmail.setText("")
+        self.femp.cmbPuesto.setCurrentIndex(0)
+        self.femp.cmbDepto.setCurrentIndex(0)
+        self.femp.txtSueldoD.setText("")
     
     def salir_form_empleados(self):
         self.femp.close()

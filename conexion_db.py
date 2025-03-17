@@ -96,7 +96,6 @@ class Conexion():
     
 
     def create_table_clientes(self):
-        #status = activo, inactivo
         try:
             query = """
             CREATE TABLE IF NOT EXISTS clientes(
@@ -120,8 +119,7 @@ class Conexion():
      
 
     def create_table_ac(self):
-        #tipo area =#estacionamiento, baño, area, isla, modulo, stand,cajon,otros
-        #status_ocupacion = ocupado, disponible
+   
         try:
             query = """
             CREATE TABLE IF NOT EXISTS areas_comunes(
@@ -144,8 +142,7 @@ class Conexion():
     
 
     def create_table_lc(self):
-        #num_local = no aceptar repetidos
-        #status_ocupacion = false,true
+
         try:
             query = """
             CREATE TABLE IF NOT EXISTS ubicaciones(
@@ -167,11 +164,6 @@ class Conexion():
             print(e)  
      
     def create_table_facturas(self):
-        #tipo_cuota = cuota area comun, cuota mantto, cuota extraordinaria mantto, cuota deposito garantia,cuota recuperacion servicio,otra
-        #tipo_factura = ingreso, egreso(nota credito)
-        #tipo_cartera = locales comerciales, areas comunes, recuperacion, extraordinarias,otras
-        #status_pagada = false,true
-        #num_fact = no aceptar repetidos
         try:
             query = """
             CREATE TABLE IF NOT EXISTS facturas(
@@ -330,7 +322,6 @@ class Conexion():
             email TEXT,
             fecha_ingreso TEXT,
             fecha_baja TEXT,
-            antiguedad as (julianday('now') - julianday(fecha_ingreso)) VIRTUAL,
             status_activo BOOLEAN,
             usuario TEXT,
             fecha_reg TEXT);
