@@ -2,8 +2,6 @@ from datetime import datetime
 import csv
 import sys
 import os
-#from msilib.schema import InstallExecuteSequence
-
 from PyQt6 import uic
 from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QLineEdit, QApplication
 from data import ctasbancos
@@ -1966,7 +1964,10 @@ class PantallaPrincipal():
         search=ProveedoresData()
         data=search.lista_proveedores()
         for item in data:
-            self.fexp.cmbProveedor.addItem(item[1])    
+            self.fexp.cmbProveedor.addItem(item[1]) 
+            
+            
+#########################################REGISTRO GASTOS############################################################               
 
     def registrar_gasto(self):
         m = QMessageBox()
@@ -2034,10 +2035,9 @@ class PantallaPrincipal():
     def salir_form_gastos(self):
         self.fexp.close()
 
+########################################ALTA PROVEEDOR/PRESTADOR SERVICIOS##########################################
     def abrir_form_alta_proveedor(self):
-        #self.fprov=uic.loadUi("gui/formRegProveedor.ui")
         self.fprov = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegProveedor.ui")
-
         self.fprov.setWindowTitle("Registro de Proveedor")
         self.fprov.show()
         self.fprov.btnRegistrar.clicked.connect(self.registrar_proveedor)
@@ -2111,15 +2111,14 @@ class PantallaPrincipal():
     def salir_form_proveedores(self):
         self.fprov.close()       
 
+######################################ALTA EMPLEADOS######################################################
     def abrir_form_alta_empleado(self):
-        #self.femp=uic.loadUi("gui/formEmpleados.ui")
         self.femp = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formEmpleados.ui")
         self.femp.setWindowTitle("Registro Empleados")
         self.femp.show()
         self.femp.btnGuardar.clicked.connect(self.registrar_empleado)
         self.femp.btnSalir.clicked.connect(self.salir_form_empleados)
-        
-    
+          
     def registrar_empleado(self):   
         m = QMessageBox()
         m.setIcon(QMessageBox.Icon.Information)
@@ -2209,6 +2208,11 @@ class PantallaPrincipal():
     def salir_form_empleados(self):
         self.femp.close()
     
+#############################BUSCAR Y EDITAR EMPLEADOS###########################################
+
+
+
+
 
     def reiniciar_sistema(self):
         self.pp.close()
