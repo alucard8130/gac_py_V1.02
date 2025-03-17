@@ -1641,14 +1641,17 @@ class PantallaPrincipal():
                 if file_path:
                     try:                            
                         workbook = xlsxwriter.Workbook(file_path)
-                        worksheet = workbook.add_worksheet()
-                                        
+                        worksheet = workbook.add_worksheet()                        
+                        worksheet.write(0, 0, "ESTADO DE CUENTA")
+                        worksheet.write(1, 0, "Numero de Local: " + self.ppcm.cmblocal.currentText())
+                        worksheet.write(2, 0, "Cliente Facturacion: " + self.ppcm.txtCliente.text())
+                        
                         headers = ["tipo_cuota", "num_fact", "importe_adeudo", "importe_pago", "importe_saldo", "fecha", "forma_pago", "num_cheque", "cta_banco","status"]
                         for col_num, header in enumerate(headers):
-                            worksheet.write(0, col_num, header)           
+                            worksheet.write(4, col_num, header)           
                             for row_num in range(self.ppcm.tblCarteraCM.rowCount()):
                                 for col_num in range(self.ppcm.tblCarteraCM.columnCount()):
-                                    worksheet.write(row_num + 1, col_num, self.ppcm.tblCarteraCM.item(row_num, col_num).text())
+                                    worksheet.write(row_num + 5, col_num, self.ppcm.tblCarteraCM.item(row_num, col_num).text())
                                         
                         workbook.close()               
                         m = QMessageBox()
@@ -1726,13 +1729,17 @@ class PantallaPrincipal():
                     try:                            
                         workbook = xlsxwriter.Workbook(file_path)
                         worksheet = workbook.add_worksheet()
+                        worksheet.write(0, 0, "ESTADO DE CUENTA")
+                        worksheet.write(1, 0, "Num.Area Comun: " + self.ppac.cmbAreaC.currentText())
+                        worksheet.write(2, 0, "Num.Contrato: "+ self.ppac.cmbContrato.currentText())
+                        worksheet.write(3, 0, "Cliente Facturacion: "+ self.ppac.txtCliente.text())
                                         
                         headers = ["contrato", "tipo_cuota","num_fact", "importe_adeudo", "importe_pago", "importe_saldo", "fecha", "forma_pago", "cta_banco","status"]
                         for col_num, header in enumerate(headers):
-                            worksheet.write(0, col_num, header)           
+                            worksheet.write(5, col_num, header)           
                             for row_num in range(self.ppac.tblCarteraAC.rowCount()):
                                 for col_num in range(self.ppac.tblCarteraAC.columnCount()):
-                                    worksheet.write(row_num + 1, col_num, self.ppac.tblCarteraAC.item(row_num, col_num).text())                
+                                    worksheet.write(row_num + 6, col_num, self.ppac.tblCarteraAC.item(row_num, col_num).text())                
                         workbook.close()               
                         m = QMessageBox()
                         m.setIcon(QMessageBox.Icon.Information)
