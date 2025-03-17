@@ -1,6 +1,7 @@
 import datetime
 import sqlite3
 
+
 current_datetime = datetime.datetime.now()        
 
 class Conexion():
@@ -55,10 +56,16 @@ class Conexion():
                 result = cursor.fetchone()
                 if result is None:
                     query = """
-                    INSERT INTO usuarios (nombre, usuario, clave, status, fecha_reg) 
+                    INSERT INTO usuarios (nombre, usuario, clave, status, fecha_reg,usuario_reg) 
                     VALUES (?, ?, ?, ?, ?)
                     """
-                    cursor.execute(query, ('Super User', 'administrador', 'adMin_81@', "True", current_datetime))
+                    nombre = 'Super User'
+                    usuario = 'administrador'
+                    clave = 'adMin_81@'
+                    status = True
+                    fecha_reg = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                    usuario_reg = 'administrador'
+                    cursor.execute(query, (nombre, usuario, clave, status, fecha_reg,usuario_reg))
                     self.conexion.commit()
                 else:
                     pass
