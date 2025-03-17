@@ -25,3 +25,11 @@ class ProveedoresData():
             return True
         else:
             return False
+    
+    def lista_empleados(self):
+        self.db = con.Conexion().conectarBd()
+        self.cursor= self.db.cursor()
+        query= self.cursor.execute("SELECT * FROM empleados order by nombre")
+        serch_info=query.fetchall()
+        self.db.close()    
+        return(serch_info)    

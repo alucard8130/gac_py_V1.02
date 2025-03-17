@@ -269,7 +269,7 @@ border-radius:5px;</string>
      <string notr="true">border-radius:5px;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="label_proveedor">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -565,6 +565,19 @@ border-radius:5px;</string>
     </property>
     <property name="text">
      <string>Num. cheque</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBoxEmpleados">
+    <property name="geometry">
+     <rect>
+      <x>185</x>
+      <y>10</y>
+      <width>81</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Empleados</string>
     </property>
    </widget>
   </widget>

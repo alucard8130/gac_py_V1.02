@@ -1954,15 +1954,35 @@ class PantallaPrincipal():
         self.fexp = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegGastos.ui")
         self.fexp.setWindowTitle("Registro Gastos Mensuales")
         self.fexp.show()
+        self.fexp.checkBoxEmpleados.setChecked(False)
+        self.fexp.label_proveedor.setText("Proveedor")
         self.set_cmb_proveedor()
+        self.fexp.checkBoxEmpleados.clicked.connect(self.check_empleados)
         self.fexp.btnRegistrar.clicked.connect(self.registrar_gasto)
         self.fexp.btnSalir.clicked.connect(self.salir_form_gastos)
-        
+         
+    def set_cmb_empleados(self):
+        search=ProveedoresData()
+        data=search.lista_empleados()
+        self.fexp.cmbProveedor.clear()
+        for item in data:
+            self.fexp.cmbProveedor.addItem(f"{item[1]} {item[2]} {item[3]}")
+    
     def set_cmb_proveedor(self):
         search=ProveedoresData()
         data=search.lista_proveedores()
+        self.fexp.cmbProveedor.clear()
         for item in data:
             self.fexp.cmbProveedor.addItem(item[1]) 
+     
+    def check_empleados(self):
+        if self.fexp.checkBoxEmpleados.isChecked():
+            self.fexp.label_proveedor.setText("Empleado")
+            self.set_cmb_empleados()
+        else:
+            self.fexp.label_proveedor.setText("Proveedor")
+            self.set_cmb_proveedor()    
+         
             
             
 #########################################REGISTRO GASTOS############################################################               
