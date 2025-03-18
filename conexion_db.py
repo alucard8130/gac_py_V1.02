@@ -55,18 +55,9 @@ class Conexion():
                 cursor.execute(query)
                 result = cursor.fetchone()
                 if result is None:
-                    query = """
-                    INSERT INTO usuarios (nombre, usuario, clave, status, fecha_reg,usuario_reg) 
-                    VALUES (?, ?, ?, ?, ?)
-                    """
-                    nombre = 'Super User'
-                    usuario = 'administrador'
-                    clave = 'adMin_81@'
-                    status = True
-                    fecha_reg = current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-                    usuario_reg = 'administrador'
-                    cursor.execute(query, (nombre, usuario, clave, status, fecha_reg,usuario_reg))
-                    self.conexion.commit()
+                    query = "INSERT INTO usuarios VALUES (null,'{}','{}','{}','{}','{}','{}')".format('Super User', 'administrador', 'adMin_81@', True, current_datetime, 'admin')
+                    self.conexion.execute(query)
+                    self.conexion.commit()    
                 else:
                     pass
             except sqlite3.Error as e:
