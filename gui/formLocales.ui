@@ -270,7 +270,7 @@ border-radius:5px;</string>
 border-radius:5px;</string>
     </property>
     <property name="text">
-     <string>XAXX010101000</string>
+     <string/>
     </property>
     <property name="alignment">
      <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>

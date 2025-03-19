@@ -121,7 +121,7 @@ border-radius:5px;</string>
      <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
     </property>
     <property name="placeholderText">
-     <string>ejemplo: K-01</string>
+     <string>ejemplo: A-01 o K-01</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">

@@ -507,6 +507,8 @@ class PantallaPrincipal():
         self.fal.setWindowTitle("Alta Local Comercial")
         self.fal.show()
         self.fal.txtLocal.setText("L-")
+        self.fal.checkBoxStatus.setChecked(True)
+        self.fal.txtRFC_p.setText("XAXX010101000")
         self.set_cmb_clientes()
         self.fal.btnGuardar.clicked.connect(self.registrar_local)
         self.fal.btnSalir.clicked.connect(self.salir_form_local) 
@@ -589,11 +591,11 @@ class PantallaPrincipal():
             self.fal.cmbClientes.addItem(item[1])
           
     def limpiar_campos_fal(self):
-        self.fal.txtLocal.setText("")
+        self.fal.txtLocal.setText("L-")
         self.fal.txtSuperficie.setText("")
         self.fal.txtCuota.setText("")
         self.fal.txtPropietario.setText("")
-        self.fal.txtRFC_p.setText("")
+        self.fal.txtRFC_p.setText("XAXX010101000")
         self.fal.cmbClientes.setCurrentIndex(0)
         self.fal.txtGiro.setText("")        
      
@@ -607,6 +609,8 @@ class PantallaPrincipal():
         self.fac=uic.loadUi(self.resource_path("gui/formAreasComunes.ui"))
         self.fac.setWindowTitle("Alta area comun")
         self.fac.show()
+        self.fac.checkBoxStatus.setChecked(True)
+        self.fac.txtArea.setText("A-")
         self.set_cmb_cliente()
         self.fac.btnGuardar.clicked.connect(self.registrar_area)
         self.fac.btnSalir.clicked.connect(self.salir_form_area)
@@ -690,7 +694,7 @@ class PantallaPrincipal():
         m.exec()
      
     def limpiar_campos_fac(self):
-        self.fac.txtArea.setText("")
+        self.fac.txtArea.setText("A-")
         self.fac.txtSuperficie.setText("")
         self.fac.txtCuota.setText("")
         self.fac.cmbClientes.setCurrentIndex(0)
@@ -1531,6 +1535,9 @@ class PantallaPrincipal():
         self.fbc.show()
         self.set_lista_contratos()
         self.fbc.cmbContrato.setCurrentIndex(0)
+        self.fbc.checkBvencido.setEnabled(False)
+        self.fbc.txtCliente.setReadOnly(True)
+        self.fbc.txtArea.setReadOnly(True)
         self.fbc.cmbContrato.currentIndexChanged.connect(self.get_info_contrato)
         self.fbc.btnEditar.clicked.connect(self.guardar_edicion)
         self.fbc.btnSalir.clicked.connect(self.salir_fbc)
@@ -1560,6 +1567,19 @@ class PantallaPrincipal():
                 self.fbc.txtDG.setText(f"{item[5]:.2f}")
                 self.fbc.checkBActivo.setChecked(item[6].lower()=='true')
                 self.fbc.checkBvencido.setChecked(item[7].lower() == 'true')
+
+            if not self.fbc.checkBActivo.isChecked():
+                self.fbc.txtfecha_ini.setReadOnly(True)
+                self.fbc.txtfecha_fin.setReadOnly(True)
+                self.fbc.txtCuota.setReadOnly(True)
+                self.fbc.txtDG.setReadOnly(True)
+                self.fbc.btnEditar.setEnabled(False)
+            else:
+                self.fbc.txtfecha_ini.setReadOnly(False)
+                self.fbc.txtfecha_fin.setReadOnly(False)
+                self.fbc.txtCuota.setReadOnly(False)
+                self.fbc.txtDG.setReadOnly(False)
+                self.fbc.btnEditar.setEnabled(True)
                              
     def guardar_edicion(self):
         if self.fbc.cmbContrato.currentIndex()==0:
@@ -1579,14 +1599,14 @@ class PantallaPrincipal():
             if res == QMessageBox.StandardButton.Ok:
                 editContrato=EditContrato(
                     n_contrato=self.fbc.cmbContrato.currentText(),
-                    c_facturacion=self.fbc.txtCliente.text(),
-                    n_area=self.fbc.txtArea.text(),
+                    #c_facturacion=self.fbc.txtCliente.text(),
+                    #n_area=self.fbc.txtArea.text(),
                     f_inicio=self.fbc.txtfecha_ini.text(),
                     f_fin=self.fbc.txtfecha_fin.text(),
                     m_cuota=self.fbc.txtCuota.text(),
                     m_dg=self.fbc.txtDG.text(),
                     s_contrato=self.fbc.checkBActivo.isChecked(),
-                    s_vigencia=self.fbc.checkBvencido.isChecked(),
+                    #s_vigencia=self.fbc.checkBvencido.isChecked(),
                     r_usuario=self.pp.lblName_User.text(),
                     f_registro=current_datetime.strftime("%Y-%m-%d %H:%M:%S")
                     )
@@ -1597,6 +1617,9 @@ class PantallaPrincipal():
                     m.setWindowTitle("Edicion Contratos AC")
                     m.setText("Contrato editado con exito")
                     m.exec()
+                    self.limpiar_campos()
+                    self.get_info_contrato(self.fbc.cmbContrato.currentText())
+                    
                 else:
                     m.setIcon(QMessageBox.Icon.Information)
                     m.setWindowTitle("Edicion Contratos AC")
@@ -1606,6 +1629,17 @@ class PantallaPrincipal():
                 
             elif res == QMessageBox.StandardButton.Cancel:
                 m.close()
+                
+    def limpiar_campos(self):
+        #self.fbc.cmbContrato.setCurrentIndex(0)
+        self.fbc.txtCliente.setText("")
+        self.fbc.txtArea.setText("")
+        self.fbc.txtfecha_ini.setText("")
+        self.fbc.txtfecha_fin.setText("")
+        self.fbc.txtCuota.setText("")
+        self.fbc.txtDG.setText("")
+        self.fbc.checkBActivo.setChecked(False)
+        self.fbc.checkBvencido.setChecked(False)            
                 
     def salir_fbc(self):
         self.fbc.close()
@@ -1646,9 +1680,9 @@ class PantallaPrincipal():
                     self.ppcm.tblCarteraCM.setItem(fila,4,QTableWidgetItem(str(item[4])))
                     self.ppcm.tblCarteraCM.setItem(fila,5,QTableWidgetItem(item[5]))
                     self.ppcm.tblCarteraCM.setItem(fila,6,QTableWidgetItem(item[6]))
-                    self.ppcm.tblCarteraCM.setItem(fila,7,QTableWidgetItem(item[9]))
-                    self.ppcm.tblCarteraCM.setItem(fila,8,QTableWidgetItem(item[7]))
-                    self.ppcm.tblCarteraCM.setItem(fila,9,QTableWidgetItem(item[8]))
+                    self.ppcm.tblCarteraCM.setItem(fila,7,QTableWidgetItem(item[7]))
+                    self.ppcm.tblCarteraCM.setItem(fila,8,QTableWidgetItem(item[8]))
+                    self.ppcm.tblCarteraCM.setItem(fila,9,QTableWidgetItem(item[9]))
                     fila+=1
                     
     def exportar_info_a_excelCM(self):
@@ -1722,19 +1756,19 @@ class PantallaPrincipal():
             else:
                 self.ppac.tblCarteraAC.setRowCount(len(data))
                 for item in data:
-                    saldo += float(item[5])
+                    saldo += float(item[4])
                     self.ppac.txtSaldo.setText(f"{saldo:,.2f}")
                     
                 for item in data:
                      self.ppac.tblCarteraAC.setItem(fila,0,QTableWidgetItem(item[0]))
                      self.ppac.tblCarteraAC.setItem(fila,1,QTableWidgetItem(item[1]))
-                     self.ppac.tblCarteraAC.setItem(fila,2,QTableWidgetItem(item[2]))
+                     self.ppac.tblCarteraAC.setItem(fila,2,QTableWidgetItem(str(item[2])))
                      self.ppac.tblCarteraAC.setItem(fila,3,QTableWidgetItem(str(item[3])))
                      self.ppac.tblCarteraAC.setItem(fila,4,QTableWidgetItem(str(item[4])))
-                     self.ppac.tblCarteraAC.setItem(fila,5,QTableWidgetItem(str(item[5])))
+                     self.ppac.tblCarteraAC.setItem(fila,5,QTableWidgetItem(item[5]))
                      self.ppac.tblCarteraAC.setItem(fila,6,QTableWidgetItem(item[6]))
-                     self.ppac.tblCarteraAC.setItem(fila,7,QTableWidgetItem(item[8]))
-                     self.ppac.tblCarteraAC.setItem(fila,8,QTableWidgetItem(item[7]))
+                     self.ppac.tblCarteraAC.setItem(fila,7,QTableWidgetItem(item[7]))
+                     self.ppac.tblCarteraAC.setItem(fila,8,QTableWidgetItem(item[8]))
                      self.ppac.tblCarteraAC.setItem(fila,9,QTableWidgetItem(item[9]))   
                      fila+=1
 

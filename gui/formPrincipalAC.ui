@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
+    <width>1050</width>
     <height>550</height>
    </rect>
   </property>
@@ -330,7 +330,7 @@ border-radius:5px;</string>
     <rect>
      <x>5</x>
      <y>160</y>
-     <width>1011</width>
+     <width>1030</width>
      <height>331</height>
     </rect>
    </property>
@@ -345,7 +345,7 @@ border-radius:5px;</string>
      <rect>
       <x>5</x>
       <y>0</y>
-      <width>1001</width>
+      <width>1030</width>
       <height>320</height>
      </rect>
     </property>
@@ -398,25 +398,14 @@ border-radius:5px;</string>
     </attribute>
     <column>
      <property name="text">
-      <string>Contrato</string>
+      <string>Tipo Cuota/Pago</string>
      </property>
      <property name="font">
       <font>
-       <stylestrategy>PreferDefault</stylestrategy>
-       <kerning>true</kerning>
-       <fontweight>ExtraBold</fontweight>
+       <family>Arial</family>
+       <pointsize>8</pointsize>
       </font>
      </property>
-     <property name="textAlignment">
-      <set>AlignHCenter|AlignBottom</set>
-     </property>
-     <property name="background">
-      <color>
-       <red>255</red>
-       <green>255</green>
-       <blue>255</blue>
-      </color>
-     </property>
      <property name="foreground">
       <brush brushstyle="SolidPattern">
        <color alpha="255">
@@ -429,21 +418,7 @@ border-radius:5px;</string>
     </column>
     <column>
      <property name="text">
-      <string>Tipo Cuota</string>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Num Factura</string>
+      <string>Factura</string>
      </property>
      <property name="font">
       <font>
@@ -471,7 +446,12 @@ border-radius:5px;</string>
     </column>
     <column>
      <property name="text">
-      <string>Importe Adeudo</string>
+      <string>Adeudo</string>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+      </font>
      </property>
      <property name="foreground">
       <brush brushstyle="SolidPattern">
@@ -485,7 +465,7 @@ border-radius:5px;</string>
     </column>
     <column>
      <property name="text">
-      <string>Importe Pago</string>
+      <string>Pago</string>
      </property>
      <property name="foreground">
       <brush brushstyle="SolidPattern">
@@ -513,7 +493,13 @@ border-radius:5px;</string>
     </column>
     <column>
      <property name="text">
-      <string>Fecha Pago/Cobro</string>
+      <string>Fecha Fact/Pago</string>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+       <pointsize>8</pointsize>
+      </font>
      </property>
      <property name="foreground">
       <brush brushstyle="SolidPattern">
@@ -541,7 +527,12 @@ border-radius:5px;</string>
     </column>
     <column>
      <property name="text">
-      <string>Cta Bancaria</string>
+      <string>Cheque</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Cta Deposito</string>
      </property>
      <property name="foreground">
       <brush brushstyle="SolidPattern">
@@ -555,7 +546,12 @@ border-radius:5px;</string>
     </column>
     <column>
      <property name="text">
-      <string>Status</string>
+      <string>Tipo Factura</string>
+     </property>
+     <property name="font">
+      <font>
+       <family>Arial</family>
+      </font>
      </property>
      <property name="foreground">
       <brush brushstyle="SolidPattern">

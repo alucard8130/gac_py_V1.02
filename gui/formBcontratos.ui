@@ -143,6 +143,9 @@ background-color: rgb(245, 245, 252);</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="checkBvencido">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -197,6 +200,9 @@ border-radius:5px;</string>
      <font>
       <pointsize>10</pointsize>
      </font>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;campo no editable&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);
@@ -300,6 +306,12 @@ border-radius:5px;</string>
       <pointsize>10</pointsize>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="toolTip">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:400;&quot;&gt;campo no editable&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+    <property name="statusTip">
+     <string/>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);

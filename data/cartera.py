@@ -7,7 +7,7 @@ class CarteraDataCM():
         self.db = con.Conexion().conectarBd()
         self.cursor= self.db.cursor()
         query= self.cursor.execute("""
-        SELECT tipo_cuota,num_fact,imp_adeudo,imp_pago,saldo_adeudo,f_cobro_o_pago,forma_pago,cta_banco,status_pago,num_cheque FROM cartera
+        SELECT tipo_cuota,num_fact,imp_adeudo,imp_pago,saldo_adeudo,f_cobro_o_pago,forma_pago,num_cheque,cta_banco,tipo_factura FROM cartera
         WHERE area_o_local='{}' AND cliente_facturacion='{}'
         """.format(ubicacion,cliente)
         )
@@ -22,7 +22,7 @@ class CarteraDataAC():
         self.db = con.Conexion().conectarBd()
         self.cursor= self.db.cursor()
         query= self.cursor.execute("""
-        SELECT num_contrato,tipo_cuota,num_fact,imp_adeudo,imp_pago,saldo_adeudo,f_cobro_o_pago,forma_pago,cta_banco,status_pago FROM cartera
+        SELECT tipo_cuota,num_fact,imp_adeudo,imp_pago,saldo_adeudo,f_cobro_o_pago,forma_pago,num_cheque,cta_banco,tipo_factura FROM cartera
         WHERE num_contrato='{}'""".format(contrato)
         )
         serch_info=query.fetchall()
