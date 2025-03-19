@@ -57,7 +57,7 @@ class PantallaPrincipal():
     
         #icon_pp= QIcon("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/iconos/cartera.ico")
         #self.pp = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formMain.ui"))
-        self.pp = uic.loadUi(resource_path("gui/formMain.ui"))
+        self.pp = uic.loadUi(self.resource_path("gui/formMain.ui"))
         self.pp.setWindowIcon(QIcon(self.resource_path("iconos/cartera.ico")))
         self.pp.setWindowTitle("Gestor Administrativo Condominal")
         self.pp.show()
