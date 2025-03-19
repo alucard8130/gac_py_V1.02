@@ -1988,6 +1988,8 @@ class PantallaPrincipal():
         self.fexp = uic.loadUi(self.resource_path("gui/formRegGastos.ui"))
         self.fexp.setWindowTitle("Registro Gastos Mensuales")
         self.fexp.show()
+        self.fexp.txtIVA_ret.setText("0.00")
+        self.fexp.txtISR_ret.setText("0.00")
         self.fexp.checkBoxEmpleados.setChecked(False)
         self.fexp.label_proveedor.setText("Proveedor")
         self.set_cmb_proveedor()
