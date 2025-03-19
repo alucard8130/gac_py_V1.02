@@ -93,6 +93,7 @@ class Ui_formClientes(object):
         self.txtRFC_p.setStyleSheet("background-color: rgb(255, 255, 255);\n"
 "border-radius:5px;")
         self.txtRFC_p.setText("")
+        self.txtRFC_p.setMaxLength(13)
         self.txtRFC_p.setAlignment(QtCore.Qt.AlignmentFlag.AlignBottom|QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft)
         self.txtRFC_p.setObjectName("txtRFC_p")
         self.txtPropietario = QtWidgets.QLineEdit(parent=self.frame_2)

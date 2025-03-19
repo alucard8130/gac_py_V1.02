@@ -65,18 +65,24 @@ class PantallaPrincipal():
         self.pp.btnInvisible.setGeometry(130,410,211,20)
         self.pp.btnInvisible.setFlat(True)
         self.pp.btnInvisible.clicked.connect(self.mostrar_recuperar_pass)
+        self.pp.pushB_user.setVisible(False)
+        self.pp.pushB_pass.setVisible(False)
         self.pp.btnRecuperar.setVisible(False) 
         self.pp.menubar.setVisible(False)
         self.pp.txtNameUser.setVisible(False)
-        self.pp.btnReiniciar.setVisible(False)
+        #self.pp.btnReiniciar.setVisible(False)
         self.pp.btnEntrar.clicked.connect(self.validar_acceso)
-        self.pp.btnNewUser.clicked.connect(self.reg_new_user)
+        self.pp.btnNewUser.clicked.connect(self.select_new_user)
+        self.pp.btnReg_new_user.setVisible(False)
+        self.pp.pushB_user.clicked.connect(self.ayuda_user)
+        self.pp.pushB_pass.clicked.connect(self.ayuda_pass)
+        self.pp.btnReg_new_user.clicked.connect(self.reg_new_user)
         self.pp.btnIngresar.clicked.connect(self.mostrar_panel)
         self.pp.btnRegresar.clicked.connect(self.ocultar_panel)
         self.pp.actionRegMovCM.triggered.connect(self.abrir_form_PPCM)
         self.pp.actionRegMovAC.triggered.connect(self.abrir_form_PPAC)    
         self.pp.actionRegistrar_cliente.triggered.connect(self.abrir_form_clientes)
-        self.pp.btnReiniciar.clicked.connect(self.reiniciar_sistema)
+        #self.pp.btnReiniciar.clicked.connect(self.reiniciar_sistema)
         self.pp.btnRecuperar.clicked.connect(self.recuperar_pass)
         self.pp.actionAltaLocal.triggered.connect(self.abrir_form_alta_local)
         self.pp.actionAltaAC.triggered.connect(self.abrir_form_alta_AC)
@@ -323,10 +329,14 @@ class PantallaPrincipal():
         self.pp.btnEntrar.setVisible(True)
         self.pp.btnNewUser.setVisible(True)
         self.pp.txtPassword.setVisible(True)
-        self.pp.txtUsuario.setText("")
-        self.pp.txtPassword.setText("")
+        self.pp.txtUsuario.setText("administrador")
+        self.pp.txtPassword.setText("adMin_81@")
         self.pp.txtNameUser.setText("")
         self.pp.toolButton.setVisible(True)
+        self.pp.pushB_user.setVisible(False)
+        self.pp.pushB_pass.setVisible(False)
+        self.pp.btnReg_new_user.setVisible(False)
+        self.pp.txtPassword.setEchoMode(QLineEdit.EchoMode.Password)    
         
     def ocultar_panel(self):
         self.pp.btnIngresar.setVisible(True)
@@ -339,10 +349,25 @@ class PantallaPrincipal():
                       
     def mostrar_password(self):
         self.pp.txtPassword.setEchoMode(QLineEdit.EchoMode.Normal)    
+     
+    def ayuda_user(self):
+        m=QMessageBox()
+        m.setIcon(QMessageBox.Icon.Information)
+        m.setWindowTitle("Ayuda Usuario")
+        m.setText("El usuario debe tener al menos 5 caracteres")
+        m.exec()
+    
+    def ayuda_pass(self):
+        m=QMessageBox()
+        m.setIcon(QMessageBox.Icon.Information)
+        m.setWindowTitle("Ayuda Password")
+        m.setText("La contraseña debe tener al menos 8 caracteres \nLa contraseña debe contener al menos una letra mayuscula \nLa contraseña debe contener al menos un carácter especial: @ # $ % * ") 
+        m.exec()
             
     def salir_pp(self):
         self.pp.close()  
  
+    
  
  ##############################################LOG IN###################################################       
     def validar_acceso(self):
@@ -374,7 +399,7 @@ class PantallaPrincipal():
                 self.pp.lblImagen.setGeometry(9,9,1200,690) 
                 m.setText("Hola""  " + nom_user)
                 self.pp.btnIngresar.setVisible(True)
-                self.pp.btnReiniciar.setVisible(True)
+                #self.pp.btnReiniciar.setVisible(True)
                 self.pp.statusBar.showMessage("Bienvenido" " "+ nom_user,0)
                 self.pp.lblName_User.setText(nom_user)
                 if nom_user == "administrador":
@@ -395,21 +420,39 @@ class PantallaPrincipal():
                 self.pp.txtPassword.setText("")
                 self.pp.txtUsuario.setFocus()
         m.exec()        
-        
-    def reg_new_user(self):
-        mensaje = QMessageBox()
-        mensaje.setIcon(QMessageBox.Icon.Information)
-        mensaje.setWindowTitle("Registrar Usuario")
+    
+    def select_new_user(self):
         self.pp.btnEntrar.setVisible(False)
         self.pp.btnInvisible.setVisible(False)
-        self.pp.btnNewUser.setGeometry(110, 440, 250, 31)
+        #self.pp.btnNewUser.setGeometry(110, 440, 250, 31)
+        self.pp.btnReg_new_user.setVisible(True)
         self.pp.txtNameUser.setGeometry(110,250,250,30)
-        self.pp.btnNewUser.setText("Registrar")
+        self.pp.btnNewUser.setVisible(False)
+        self.pp.btnReg_new_user.setGeometry(110, 440, 250, 31)
         self.pp.txtNameUser.setVisible(True)
         self.pp.lblRecPassword.setVisible(False)
         self.pp.txtNameUser.setFocus()
         self.pp.txtUsuario.setText("")
         self.pp.txtPassword.setText("")
+        self.pp.pushB_user.setVisible(True)
+        self.pp.pushB_pass.setVisible(True)    
+         
+    def reg_new_user(self):
+        mensaje = QMessageBox()
+        mensaje.setIcon(QMessageBox.Icon.Information)
+        mensaje.setWindowTitle("Registrar Usuario")
+        # self.pp.btnEntrar.setVisible(False)
+        # self.pp.btnInvisible.setVisible(False)
+        # self.pp.btnNewUser.setGeometry(110, 440, 250, 31)
+        # self.pp.txtNameUser.setGeometry(110,250,250,30)
+        # self.pp.btnNewUser.setText("Registrar")
+        # self.pp.txtNameUser.setVisible(True)
+        # self.pp.lblRecPassword.setVisible(False)
+        # self.pp.txtNameUser.setFocus()
+        # self.pp.txtUsuario.setText("")
+        # self.pp.txtPassword.setText("")
+        # self.pp.pushB_user.setVisible(True)
+        # self.pp.pushB_pass.setVisible(True)
         
         nombre= self.pp.txtNameUser.text()
         usuario = self.pp.txtUsuario.text()
@@ -669,6 +712,10 @@ class PantallaPrincipal():
             m.setText("Capture Deposito Garantia")
             self.fac.txtDG.setFocus()
             
+        elif not self.fac.txtDG.text().replace('.',"",1).isnumeric():     
+            m.setText("Captura solo numeros")
+            self.fac.txtDG.setText('0.00')
+            self.fac.txtDG.setFocus()    
         else:
             reg_area=RegAC(
                 num_area=self.fac.txtArea.text().upper(),
@@ -792,9 +839,10 @@ class PantallaPrincipal():
         elif self.fpcm.txtImporte.text()=="":
             m.setText("captura un importe")
             self.fpcm.txtImporte.setFocus()
+            
         elif not self.fpcm.txtImporte.text().replace('.', '', 1).isnumeric():      
             m.setText("captura solo numeros")
-            self.fpcm.txtImporte.setText('0')
+            self.fpcm.txtImporte.setText('0.00')
             self.fpcm.txtImporte.setFocus()
               
         elif self.fpcm.cmbFormaPago.currentIndex()==0:
@@ -907,9 +955,10 @@ class PantallaPrincipal():
         elif self.ffcm.txtImporte.text()=="":
             m.setText("captura un importe")
             self.ffcm.txtImporte.setFocus()
+            
         elif not self.ffcm.txtImporte.text().replace('.', '', 1).isnumeric():      
             m.setText("captura solo numeros")
-            self.ffcm.txtImporte.setText('0')
+            self.ffcm.txtImporte.setText('0.00')
             self.ffcm.txtImporte.setFocus()
                 
         else:
@@ -1070,9 +1119,10 @@ class PantallaPrincipal():
         elif self.fpac.txtImporte.text()=="":
             m.setText("captura un importe")
             self.fpac.txtImporte.setFocus()
+            
         elif not self.fpac.txtImporte.text().replace('.', '', 1).isnumeric():      
             m.setText("captura solo numeros")
-            self.fpac.txtImporte.setText('0')
+            self.fpac.txtImporte.setText('0.00')
             self.fpac.txtImporte.setFocus()
               
         elif self.fpac.cmbFormaPago.currentIndex()==0:
@@ -1185,9 +1235,10 @@ class PantallaPrincipal():
         elif self.ffac.txtImporte.text()=="":
             m.setText("captura un importe")
             self.ffac.txtImporte.setFocus()
+            
         elif not self.ffac.txtImporte.text().replace('.', '', 1).isnumeric():      
             m.setText("captura solo numeros")
-            self.ffac.txtImporte.setText('0')
+            self.ffac.txtImporte.setText('0.00')
             self.ffac.txtImporte.setFocus()
                 
         else:
@@ -1284,8 +1335,12 @@ class PantallaPrincipal():
                 m.setText("Selecciona una Opcion")     
                 self.fcl.cmbTipoCliente.setFocus()
                 
-            elif self.fcl.txtEmail.text()=="":
+            elif self.fcl.txtEmail.text() == "":
                 m.setText("Captura Email")
+                self.fcl.txtEmail.setFocus()
+                
+            elif "@" not in self.fcl.txtEmail.text() or "." not in self.fcl.txtEmail.text():
+                m.setText("Captura un Email válido")
                 self.fcl.txtEmail.setFocus()
         
             elif self.fcl.txtGiro.text()=="":
@@ -1357,7 +1412,7 @@ class PantallaPrincipal():
     def registrar_cta_banco(self):
         m=QMessageBox()
         m.setIcon(QMessageBox.Icon.Information)
-        m.setWindowTitle("Cuenta Bancaria")
+        m.setWindowTitle("Registro Cuentas Bancarias")
         m.setStandardButtons(QMessageBox.StandardButton.Ok)
         
         if self.fban.txtNombreBanco.text()=="":       
@@ -1369,11 +1424,11 @@ class PantallaPrincipal():
             self.fban.txtNumCta.setFocus()
                         
         elif self.fban.cmbTipoCta.currentIndex()==0:
-            m.setText("Seleccona una opcion")
+            m.setText("Selecciona una opcion")
             self.fban.cmbTipoCta.setFocus()
         
         elif self.fban.cmbTipoMoneda.currentIndex()==0:
-            m.setText("Capture Clabe")
+            m.setText("Selecciona una opcion")
             self.fban.cmbTipoMoneda.setFocus()
         else:    
             regCta=Cuentas(
@@ -1413,7 +1468,6 @@ class PantallaPrincipal():
         self.set_cmb_ac()
         self.set_cmb_clientes_c()
         self.numeros_contratos()
-        self.fcon.checkBActivo.setChecked(True)
         self.fcon.cmbAreaComun.currentIndexChanged.connect(self.set_cuota)
         self.fcon.btnGuardar.clicked.connect(self.registrar_contrato)
         self.fcon.btnSalir.clicked.connect(self.salir_form_contratos)
@@ -1521,6 +1575,7 @@ class PantallaPrincipal():
         self.fcon.cmbTipoContrato.setCurrentIndex(0)
         self.fcon.txtCuota.setText("")
         self.fcon.txtDG.setText("")  
+        self.numeros_contratos()
             
     def salir_form_contratos(self):
         self.fcon.close()        
@@ -2160,8 +2215,15 @@ class PantallaPrincipal():
             m.setText("Captura solo números en el teléfono")
             self.fprov.txtTelefono.setText("")
             self.fprov.txtTelefono.setFocus()
+        elif self.fprov.Telefono.length() < 10:
+            m.setText("Captura un teléfono válido")
+            self.fprov.txtTelefono.setText("55")
+            self.fprov.txtTelefono.setFocus()    
         elif self.fprov.txtEmail.text() == "":
             m.setText("Captura email del proveedor")
+            self.fprov.txtEmail.setFocus()
+        elif "@" not in self.fprov.txtEmail.text() or "." not in self.fprov.txtEmail.text():
+            m.setText("Captura un email válido")
             self.fprov.txtEmail.setFocus()
         else:
             regProveedor = RegProveedor(
@@ -2234,12 +2296,19 @@ class PantallaPrincipal():
             m.setText("Captura teléfono del empleado")
             self.femp.txtCel.setFocus()
         elif not self.femp.txtCel.text().isnumeric():
-            m.setText("Captura solo números en el teléfono")
-            self.femp.txtCel.setText("")
+            m.setText("Captura solo números")
+            self.femp.txtCel.setText("55")
             self.femp.txtCel.setFocus()
+        elif self.femp.txtCel.length() < 10:
+            m.setText("Captura un teléfono válido")
+            self.femp.txtCel.setText("55")
+            self.femp.txtCel.setFocus()    
         elif self.femp.txtNSS.text()=="":
             m.setText("Captura el numero de seguridad social")
             self.femp.txtNSS.setFocus()
+        elif not self.txtNSS.text().isnumeric():
+            m.setText("Captura solo números")
+            self.femp.txtNSS.setFocus()    
         elif self.femp.cmbPuesto.currentIndex() == 0:
             m.setText("Seleccciona una opcion")
             self.femp.cmbPuesto.setFocus()
@@ -2248,9 +2317,10 @@ class PantallaPrincipal():
             self.femp.cmbDepto.setFocus()
         elif self.femp.txtSueldoD.text() == "":
             m.setText("Captura el sueldo del empleado")
-            self.femp.txtSueldoD.setFocus()
+            self.femp.txtSueldoD.setFocus()    
         elif not self.femp.txtSueldoD.text().replace(".","",1).isnumeric():
             m.setText("Captura un importe correcto")
+            self.femp.txtSueldoD.setText("0.00")
             self.femp.txtSueldoD.setFocus()
         else:
             regEmpleado = RegEmpleado(
@@ -2304,9 +2374,9 @@ class PantallaPrincipal():
 
 
 
-    def reiniciar_sistema(self):
-        self.pp.close()
-        os.system("python gac.py")
+    # def reiniciar_sistema(self):
+    #     self.pp.close()
+    #     os.system("python gac.py")
     
 if __name__ == "__main__":
     app = QApplication(sys.argv)

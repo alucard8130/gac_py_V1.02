@@ -285,6 +285,9 @@ border-radius:5px;</string>
 border-radius:5px;
 </string>
     </property>
+    <property name="maxLength">
+     <number>13</number>
+    </property>
     <property name="alignment">
      <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
     </property>
@@ -352,6 +355,12 @@ border-radius:5px;</string>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 255, 255);
 border-radius:5px;</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="maxLength">
+     <number>18</number>
     </property>
     <property name="alignment">
      <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>

@@ -470,51 +470,6 @@ border-radius:5px;
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="btnEditar">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>10</y>
-      <width>170</width>
-      <height>30</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Comic Sans MS</family>
-      <pointsize>12</pointsize>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="layoutDirection">
-     <enum>Qt::LayoutDirection::LeftToRight</enum>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-color: rgb(8, 19, 95);
-color: rgb(255, 255, 255);
-border-radius:5px;
-</string>
-    </property>
-    <property name="text">
-     <string>Editar</string>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../iconos/Custom-Icon-Design-Pretty-Office-9-Edit-file.256.png</normaloff>../iconos/Custom-Icon-Design-Pretty-Office-9-Edit-file.256.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>25</width>
-      <height>25</height>
-     </size>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QPushButton" name="btnSalir">
     <property name="geometry">
      <rect>

@@ -401,6 +401,9 @@ color: rgb(216, 224, 236);</string>
     <property name="styleSheet">
      <string notr="true">border-radius:5px;</string>
     </property>
+    <property name="maxLength">
+     <number>13</number>
+    </property>
    </widget>
    <widget class="QLineEdit" name="txtCURP">
     <property name="geometry">
@@ -413,6 +416,9 @@ color: rgb(216, 224, 236);</string>
     </property>
     <property name="styleSheet">
      <string notr="true">border-radius:5px;</string>
+    </property>
+    <property name="maxLength">
+     <number>18</number>
     </property>
    </widget>
   </widget>
