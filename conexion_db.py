@@ -6,6 +6,7 @@ current_datetime = datetime.datetime.now()
 
 class Conexion():
     def __init__(self):
+        self.conexion = None
         try:
             self.conexion = sqlite3.connect("gac.db")
             self.create_tables()
@@ -41,9 +42,7 @@ class Conexion():
             self.create_table_proveedores() 
             self.create_table_empleados()
             #self.create_table_otros_ingresos()
-            
-            
-            
+        
         except sqlite3.Error as e:
             print(e)
             
@@ -333,4 +332,10 @@ class Conexion():
        return self.conexion                    
             
 conexion=Conexion()  
-conexion.conexion.close()
+if conexion.conexion:
+    try:
+        conexion.conexion.close()
+    except AttributeError as e:
+        print(e)   
+else:
+    print("la conexion no ha sido inicializada")    

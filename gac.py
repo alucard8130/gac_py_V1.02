@@ -54,7 +54,6 @@ class PantallaPrincipal():
     
     
     def __init__(self):
-    
         #icon_pp= QIcon("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/iconos/cartera.ico")
         #self.pp = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formMain.ui"))
         self.pp = uic.loadUi(self.resource_path("gui/formMain.ui"))
