@@ -40,12 +40,25 @@ from PyQt6.QtGui import QIcon
 current_datetime = datetime.today()
 
 ###############################################PANTALLA PRINCIPAL####################################################################################
-
 class PantallaPrincipal():
+    @staticmethod
+    def resource_path(relative_path):
+    # Get absolute path to resource, works for dev and for PyInstaller
+        try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+            
+        return os.path.join(base_path, relative_path)
+    
+    
     def __init__(self):
-        icon_pp= QIcon("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/iconos/cartera.ico")
-        self.pp = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formMain.ui")
-        self.pp.setWindowIcon(icon_pp)
+    
+        #icon_pp= QIcon("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/iconos/cartera.ico")
+        #self.pp = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formMain.ui"))
+        self.pp = uic.loadUi(resource_path("gui/formMain.ui"))
+        self.pp.setWindowIcon(QIcon(self.resource_path("iconos/cartera.ico")))
         self.pp.setWindowTitle("Gestor Administrativo Condominal")
         self.pp.show()
         self.pp.resize(1132,805)
@@ -82,6 +95,8 @@ class PantallaPrincipal():
         self.pp.actionAlta_Prest_Serv.triggered.connect(self.abrir_form_alta_proveedor)
         self.pp.actionAlta_Empleado.triggered.connect(self.abrir_form_alta_empleado)
         self.pp.btnSalirPP.clicked.connect(self.salir_pp) 
+    
+    
     
             
     def carga_clientes_bd(self):
@@ -488,7 +503,8 @@ class PantallaPrincipal():
  
  #################################ALTA LOCALES COMERCIALES###############################################   
     def abrir_form_alta_local(self):
-        self.fal=uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formLocales.ui")
+        #self.fal=uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formLocales.ui"))
+        self.fal=uic.loadUi(self.resource_path("gui/formLocales.ui"))
         self.fal.setWindowTitle("Alta Local Comercial")
         self.fal.show()
         self.fal.txtLocal.setText("L-")
@@ -588,7 +604,8 @@ class PantallaPrincipal():
           
  #################################ALTA AREAS COMUNES##############################################   
     def abrir_form_alta_AC(self):
-        self.fac=uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formAreasComunes.ui")
+       #self.fac=uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formAreasComunes.ui"))
+        self.fac=uic.loadUi(self.resource_path("gui/formAreasComunes.ui"))
         self.fac.setWindowTitle("Alta area comun")
         self.fac.show()
         self.set_cmb_cliente()
@@ -688,7 +705,8 @@ class PantallaPrincipal():
                
  #######################   PANTALLA PRINCIPAL GESTOR LOCALES COMERCIALES#############################################         
     def abrir_form_PPCM(self):
-        self.ppcm = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formPrincipalCM.ui")
+        #self.ppcm = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formPrincipalCM.ui"))
+        self.ppcm = uic.loadUi(self.resource_path("gui/formPrincipalCM.ui"))
         self.ppcm.setWindowTitle("Cartera Locales Comerciales")
         self.ppcm.show()
         self.set_cmb_locales_ppcm()
@@ -732,7 +750,8 @@ class PantallaPrincipal():
 ################################## PAGOS---COBRANZA---LC --######################################        
     def abrir_form_pagosCM(self):
         #self.fpcm=uic.loadUi("gui/formRegPagosCM.ui")
-        self.fpcm = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegPagosCM.ui")
+        #self.fpcm = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegPagosCM.ui"))
+        self.fpcm = uic.loadUi(self.resource_path("gui/formRegPagosCM.ui"))
         self.fpcm.setWindowTitle("registro cobranza cuotas")
         self.fpcm.show()
         self.set_cmb_factura_fpcm()
@@ -855,7 +874,8 @@ class PantallaPrincipal():
             self.ppcm.cmblocal.setFocus()
         else:    
             #self.ffcm=uic.loadUi("gui/formRegFacturasCM.ui")
-            self.ffcm = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegFacturasCM.ui")
+            #self.ffcm = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegFacturasCM.ui"))
+            self.ffcm = uic.loadUi(self.resource_path("gui/formRegFacturasCM.ui"))
             self.ffcm.setWindowTitle("registro facturas cuotas")
             self.ffcm.show()
             self.ffcm.txtNumFact.setText("F-")
@@ -957,7 +977,8 @@ class PantallaPrincipal():
 #############################PANTALLA PRINCIPAL GESTOR AREAS COMUNES#############################################    
     def abrir_form_PPAC(self):
         #self.ppac = uic.loadUi("gui/formPrincipalAC.ui")
-        self.ppac = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formPrincipalAC.ui")
+        #self.ppac = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formPrincipalAC.ui"))
+        self.ppac = uic.loadUi(self.resource_path("gui/formPrincipalAC.ui"))
         self.ppac.setWindowTitle("Cartera Areas Comunes")
         self.ppac.show()   
         self.set_cmb_contratos_PPAC()
@@ -1003,7 +1024,8 @@ class PantallaPrincipal():
 ################################## PAGOS---COBRANZA--AC --######################################        
     def abrir_form_pagosAC(self):
         #self.fpac=uic.loadUi("gui/formRegPagosAC.ui")
-        self.fpac = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegPagosAC.ui")
+        #self.fpac = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegPagosAC.ui"))
+        self.fpac = uic.loadUi(self.resource_path("gui/formRegPagosAC.ui"))
         self.fpac.setWindowTitle("registro cobranza cuotas")
         self.fpac.show()
         self.set_cmb_factura_fpac()
@@ -1130,7 +1152,8 @@ class PantallaPrincipal():
             self.ppac.cmbContrato.setFocus()
         else:
             #self.ffac=uic.loadUi("gui/formRegFacturasAC.ui")
-            self.ffac = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegFacturasAC.ui")
+            #self.ffac = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegFacturasAC.ui"))
+            self.ffac = uic.loadUi(self.resource_path("gui/formRegFacturasAC.ui"))
             self.ffac.setWindowTitle("registro facturas cuotas")
             self.ffac.show()
             self.ffac.txtNumFact.setText("F-")
@@ -1232,8 +1255,8 @@ class PantallaPrincipal():
 ##########################  CLIENTES #########################################   
     def abrir_form_clientes(self):
         #self.fcl=uic.loadUi("gui/formClientes.ui")
-        self.fcl = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formClientes.ui")
-
+        #self.fcl = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formClientes.ui"))
+        self.fcl = uic.loadUi(self.resource_path("gui/formClientes.ui"))
         self.fcl.setWindowTitle("Registro Clientes")
         self.fcl.show()
         self.fcl.checkBoxStatus.setChecked(True)
@@ -1321,7 +1344,8 @@ class PantallaPrincipal():
 #########################CTA BANCARIA#################################################
     def abrir_form_banco(self):
         #self.fban=uic.loadUi("gui/formBanco.ui")
-        self.fban = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formBanco.ui")
+        #self.fban = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formBanco.ui"))
+        self.fban = uic.loadUi(self.resource_path("gui/formBanco.ui"))
         self.fban.setWindowTitle("Registro Cuentas Bancarias")
         self.fban.btnGuardar.clicked.connect(self.registrar_cta_banco)
         self.fban.btnSalir.clicked.connect(self.salir_form_banco)
@@ -1379,7 +1403,8 @@ class PantallaPrincipal():
 ##################################REGISTRAR CONTRATOS#############################################
     def abrir_form_contratos(self):
         #self.fcon=uic.loadUi("gui/formContratos.ui")
-        self.fcon = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formContratos.ui")
+        #self.fcon = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formContratos.ui"))
+        self.fcon = uic.loadUi(self.resource_path("gui/formContratos.ui"))
         self.fcon.setWindowTitle("Registro Contratos Areas Comunes")
         self.fcon.show()
         self.set_cmb_ac()
@@ -1501,7 +1526,8 @@ class PantallaPrincipal():
 ##################################BUSCAR Y EDITAR CONTRATOS#############################################           
     def abrir_form_buscar_contratos(self):
         #self.fbc=uic.loadUi("gui/formBcontratos.ui")
-        self.fbc = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formBcontratos.ui")
+        #self.fbc = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formBcontratos.ui"))
+        self.fbc = uic.loadUi(self.resource_path("gui/formBcontratos.ui"))
         self.fbc.setWindowTitle("Buscar y Editar Contratos Areas Comunes")
         self.fbc.show()
         self.set_lista_contratos()
@@ -1764,7 +1790,8 @@ class PantallaPrincipal():
 ########################################CARGA MASIVA DE CUOTAS###########################################################
     def abrir_form_cmasiva(self):
         #self.ffm=uic.loadUi("gui/formFactMasiva.ui")
-        self.ffm = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formFactMasiva.ui")
+        #self.ffm = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formFactMasiva.ui"))
+        self.ffm = uic.loadUi(self.resource_path("gui/formFactMasiva.ui"))
         self.ffm.setWindowTitle("Carga Mensual Facturas Cuotas")
         self.ffm.show()
         self.ffm.cmbTcartera.setCurrentIndex(0)
@@ -1958,7 +1985,8 @@ class PantallaPrincipal():
 ###################################################MODULO GASTOS#####################################################################
     def abrir_form_gastos(self):
         #self.fexp=uic.loadUi("gui/formRegGastos.ui")
-        self.fexp = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegGastos.ui")
+        #self.fexp = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegGastos.ui"))
+        self.fexp = uic.loadUi(self.resource_path("gui/formRegGastos.ui"))
         self.fexp.setWindowTitle("Registro Gastos Mensuales")
         self.fexp.show()
         self.fexp.checkBoxEmpleados.setChecked(False)
@@ -2062,7 +2090,8 @@ class PantallaPrincipal():
 
 ########################################ALTA PROVEEDOR/PRESTADOR SERVICIOS##########################################
     def abrir_form_alta_proveedor(self):
-        self.fprov = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegProveedor.ui")
+        #self.fprov = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegProveedor.ui"))
+        self.fprov = uic.loadUi(self.resource_path("gui/formRegProveedor.ui"))
         self.fprov.setWindowTitle("Registro de Proveedor")
         self.fprov.show()
         self.fprov.btnRegistrar.clicked.connect(self.registrar_proveedor)
@@ -2138,7 +2167,8 @@ class PantallaPrincipal():
 
 ######################################ALTA EMPLEADOS######################################################
     def abrir_form_alta_empleado(self):
-        self.femp = uic.loadUi("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formEmpleados.ui")
+        #self.femp = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formEmpleados.ui"))
+        self.femp = uic.loadUi(self.resource_path("gui/formEmpleados.ui"))
         self.femp.setWindowTitle("Registro Empleados")
         self.femp.show()
         self.femp.btnGuardar.clicked.connect(self.registrar_empleado)
