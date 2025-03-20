@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>formPrincipalAC</class>
- <widget class="QDialog" name="formPrincipalAC">
+ <class>formReporteIngresos</class>
+ <widget class="QDialog" name="formReporteIngresos">
   <property name="windowModality">
    <enum>Qt::WindowModality::ApplicationModal</enum>
   </property>
@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1109</width>
+    <width>1030</width>
     <height>550</height>
    </rect>
   </property>
@@ -22,89 +22,24 @@
   <property name="modal">
    <bool>true</bool>
   </property>
-  <widget class="QComboBox" name="cmbContrato">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>120</y>
-     <width>131</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 255, 255);
-border-radius:5px;</string>
-   </property>
-   <item>
-    <property name="text">
-     <string>--elige una opcion</string>
-    </property>
-   </item>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>100</y>
-     <width>81</width>
-     <height>21</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial Rounded MT</family>
-     <pointsize>12</pointsize>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Contrato</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignCenter</set>
-   </property>
-  </widget>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>930</x>
+     <x>700</x>
      <y>90</y>
-     <width>131</width>
+     <width>51</width>
      <height>21</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>Arial Rounded MT</family>
-     <pointsize>12</pointsize>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
      <bold>true</bold>
     </font>
    </property>
    <property name="text">
-    <string>Saldo Adeudo</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignHCenter</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_4">
-   <property name="geometry">
-    <rect>
-     <x>520</x>
-     <y>90</y>
-     <width>121</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial Rounded MT</family>
-     <pointsize>12</pointsize>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Cliente </string>
+    <string>Total</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignHCenter</set>
@@ -145,10 +80,10 @@ border-radius:5px;</string>
     </size>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnRegCob">
+  <widget class="QPushButton" name="btnLimpiar">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>230</x>
      <y>500</y>
      <width>150</width>
      <height>41</height>
@@ -167,11 +102,7 @@ color: rgb(255, 255, 255);
 border-radius:5px;</string>
    </property>
    <property name="text">
-    <string>Reg.Cobranza</string>
-   </property>
-   <property name="icon">
-    <iconset>
-     <normaloff>../iconos/Webiconset-Application-Invoice.128.png</normaloff>../iconos/Webiconset-Application-Invoice.128.png</iconset>
+    <string>Limpiar</string>
    </property>
    <property name="iconSize">
     <size>
@@ -180,10 +111,10 @@ border-radius:5px;</string>
     </size>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnRegFact">
+  <widget class="QPushButton" name="btnEliminar">
    <property name="geometry">
     <rect>
-     <x>480</x>
+     <x>440</x>
      <y>500</y>
      <width>150</width>
      <height>41</height>
@@ -203,11 +134,11 @@ border-radius:5px;
 </string>
    </property>
    <property name="text">
-    <string>Reg.Facturas</string>
+    <string>Eliminar</string>
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>../iconos/icons8-factura-100.png</normaloff>../iconos/icons8-factura-100.png</iconset>
+     <normaloff>../iconos/eliminar.png</normaloff>../iconos/eliminar.png</iconset>
    </property>
    <property name="iconSize">
     <size>
@@ -216,10 +147,10 @@ border-radius:5px;
     </size>
    </property>
   </widget>
-  <widget class="QPushButton" name="btnEdoCta">
+  <widget class="QPushButton" name="btnBajar_info">
    <property name="geometry">
     <rect>
-     <x>720</x>
+     <x>650</x>
      <y>500</y>
      <width>150</width>
      <height>41</height>
@@ -255,7 +186,7 @@ border-radius:5px;
   <widget class="QPushButton" name="btnSalir">
    <property name="geometry">
     <rect>
-     <x>940</x>
+     <x>860</x>
      <y>500</y>
      <width>150</width>
      <height>41</height>
@@ -290,51 +221,12 @@ border-radius:5px;</string>
     </size>
    </property>
   </widget>
-  <widget class="QLabel" name="label_5">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>100</y>
-     <width>101</width>
-     <height>16</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Arial Rounded MT</family>
-     <pointsize>12</pointsize>
-     <bold>true</bold>
-    </font>
-   </property>
-   <property name="text">
-    <string>Area Comun</string>
-   </property>
-  </widget>
-  <widget class="QComboBox" name="cmbAreaC">
-   <property name="geometry">
-    <rect>
-     <x>160</x>
-     <y>120</y>
-     <width>121</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">background-color: rgb(255, 255, 255);
-border-radius:5px;</string>
-   </property>
-   <item>
-    <property name="text">
-     <string>--elije una opcion</string>
-    </property>
-   </item>
-  </widget>
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
      <x>5</x>
      <y>160</y>
-     <width>1100</width>
+     <width>1020</width>
      <height>331</height>
     </rect>
    </property>
@@ -344,12 +236,12 @@ border-radius:5px;</string>
    <property name="frameShadow">
     <enum>QFrame::Shadow::Raised</enum>
    </property>
-   <widget class="QTableWidget" name="tblCarteraAC">
+   <widget class="QTableWidget" name="tblIngresos">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1099</width>
+      <width>1019</width>
       <height>320</height>
      </rect>
     </property>
@@ -372,7 +264,6 @@ border-radius:5px;</string>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(255, 242, 222);
-
 font: 700 9pt &quot;Arial Rounded MT&quot;;
 border-radius:5px;</string>
     </property>
@@ -391,116 +282,50 @@ border-radius:5px;</string>
     <property name="showGrid">
      <bool>false</bool>
     </property>
+    <property name="gridStyle">
+     <enum>Qt::PenStyle::DashLine</enum>
+    </property>
     <property name="wordWrap">
      <bool>false</bool>
     </property>
     <property name="cornerButtonEnabled">
      <bool>true</bool>
     </property>
+    <attribute name="horizontalHeaderVisible">
+     <bool>true</bool>
+    </attribute>
     <attribute name="horizontalHeaderMinimumSectionSize">
      <number>20</number>
     </attribute>
     <attribute name="horizontalHeaderDefaultSectionSize">
-     <number>110</number>
+     <number>146</number>
+    </attribute>
+    <attribute name="verticalHeaderMinimumSectionSize">
+     <number>20</number>
     </attribute>
     <column>
      <property name="text">
-      <string>Tipo Cuota/Pago</string>
+      <string>Tipo Cartera</string>
      </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
+    </column>
+    <column>
+     <property name="text">
+      <string>Tipo de Pago</string>
      </property>
     </column>
     <column>
      <property name="text">
       <string>Factura</string>
      </property>
-     <property name="font">
-      <font>
-       <kerning>false</kerning>
-       <hintingpreference>PreferDefaultHinting</hintingpreference>
-       <fontweight>Medium</fontweight>
-      </font>
-     </property>
-     <property name="background">
-      <color>
-       <red>255</red>
-       <green>255</green>
-       <blue>255</blue>
-      </color>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
+    </column>
+    <column>
+     <property name="text">
+      <string>Forma de Pago</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Adeudo</string>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Pago</string>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Saldo</string>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Fecha Fact/Pago</string>
+      <string>Cuenta Deposito</string>
      </property>
      <property name="font">
       <font>
@@ -508,66 +333,15 @@ border-radius:5px;</string>
        <pointsize>8</pointsize>
       </font>
      </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
+    </column>
+    <column>
+     <property name="text">
+      <string>Importe</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Forma pago</string>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Cheque</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Cta Deposito</string>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Tipo Factura</string>
-     </property>
-     <property name="font">
-      <font>
-       <family>Arial</family>
-      </font>
-     </property>
-     <property name="foreground">
-      <brush brushstyle="SolidPattern">
-       <color alpha="255">
-        <red>0</red>
-        <green>0</green>
-        <blue>0</blue>
-       </color>
-      </brush>
+      <string>Fecha Pago</string>
      </property>
     </column>
    </widget>
@@ -577,7 +351,7 @@ border-radius:5px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1111</width>
+     <width>1031</width>
      <height>81</height>
     </rect>
    </property>
@@ -619,20 +393,20 @@ color: rgb(255, 78, 2);
 color: rgb(216, 224, 236);</string>
     </property>
     <property name="text">
-     <string> GESTOR CARTERA AREAS COMUNES</string>
+     <string> REPORTE FLUJO DE EFECTIVO</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
     </property>
    </widget>
   </widget>
-  <widget class="QLineEdit" name="txtSaldo">
+  <widget class="QLineEdit" name="txtTotal">
    <property name="geometry">
     <rect>
-     <x>920</x>
-     <y>120</y>
-     <width>160</width>
-     <height>30</height>
+     <x>700</x>
+     <y>110</y>
+     <width>291</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
@@ -652,19 +426,19 @@ border-radius:5px;</string>
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLineEdit" name="txtCliente">
+  <widget class="QLineEdit" name="txt_form_flujo">
    <property name="geometry">
     <rect>
-     <x>330</x>
-     <y>109</y>
-     <width>551</width>
+     <x>20</x>
+     <y>110</y>
+     <width>631</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Comic Sans MS</family>
-     <pointsize>16</pointsize>
+     <pointsize>12</pointsize>
     </font>
    </property>
    <property name="styleSheet">
@@ -672,10 +446,33 @@ border-radius:5px;</string>
 border-radius:5px;</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>
+    <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
    <property name="readOnly">
     <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbl_form_flujo">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>90</y>
+     <width>71</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Arial</family>
+     <pointsize>10</pointsize>
+     <bold>true</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>Cliente</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignHCenter</set>
    </property>
   </widget>
  </widget>

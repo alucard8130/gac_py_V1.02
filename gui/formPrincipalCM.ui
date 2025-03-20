@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1050</width>
+    <width>1100</width>
     <height>557</height>
    </rect>
   </property>
@@ -72,7 +72,7 @@ border-radius:5px;</string>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>850</x>
+     <x>920</x>
      <y>100</y>
      <width>121</width>
      <height>21</height>
@@ -153,7 +153,7 @@ border-radius:5px;</string>
   <widget class="QPushButton" name="btnRegCob">
    <property name="geometry">
     <rect>
-     <x>230</x>
+     <x>250</x>
      <y>500</y>
      <width>150</width>
      <height>41</height>
@@ -188,7 +188,7 @@ border-radius:5px;</string>
   <widget class="QPushButton" name="btnRegFact">
    <property name="geometry">
     <rect>
-     <x>430</x>
+     <x>480</x>
      <y>500</y>
      <width>150</width>
      <height>41</height>
@@ -224,7 +224,7 @@ border-radius:5px;
   <widget class="QPushButton" name="btnEdoCta">
    <property name="geometry">
     <rect>
-     <x>640</x>
+     <x>700</x>
      <y>500</y>
      <width>150</width>
      <height>41</height>
@@ -260,7 +260,7 @@ border-radius:5px;
   <widget class="QPushButton" name="btnSalir">
    <property name="geometry">
     <rect>
-     <x>850</x>
+     <x>930</x>
      <y>500</y>
      <width>150</width>
      <height>41</height>
@@ -298,9 +298,9 @@ border-radius:5px;</string>
   <widget class="QTableWidget" name="tblCarteraCM">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>0</x>
      <y>170</y>
-     <width>1031</width>
+     <width>1099</width>
      <height>316</height>
     </rect>
    </property>
@@ -309,6 +309,9 @@ border-radius:5px;</string>
      <width>16777215</width>
      <height>16777214</height>
     </size>
+   </property>
+   <property name="cursor" stdset="0">
+    <cursorShape>PointingHandCursor</cursorShape>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(255, 242, 222);
@@ -322,6 +325,9 @@ border-radius:5px;</string>
    <property name="gridStyle">
     <enum>Qt::PenStyle::DashLine</enum>
    </property>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>110</number>
+   </attribute>
    <column>
     <property name="text">
      <string>Tipo Cuota/Pago</string>
@@ -491,7 +497,7 @@ border-radius:5px;</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1031</width>
+     <width>1101</width>
      <height>81</height>
     </rect>
    </property>
@@ -515,7 +521,7 @@ border-radius:5px;</string>
      <rect>
       <x>0</x>
       <y>40</y>
-      <width>1041</width>
+      <width>1061</width>
       <height>41</height>
      </rect>
     </property>
@@ -543,7 +549,7 @@ color: rgb(216, 224, 236);</string>
   <widget class="QLineEdit" name="txtSaldo">
    <property name="geometry">
     <rect>
-     <x>840</x>
+     <x>910</x>
      <y>120</y>
      <width>160</width>
      <height>30</height>
@@ -569,9 +575,9 @@ border-radius:5px;</string>
   <widget class="QLineEdit" name="txtCliente">
    <property name="geometry">
     <rect>
-     <x>250</x>
+     <x>270</x>
      <y>110</y>
-     <width>561</width>
+     <width>591</width>
      <height>41</height>
     </rect>
    </property>

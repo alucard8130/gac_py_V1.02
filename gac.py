@@ -5,7 +5,7 @@ import os
 from PyQt6 import uic
 from PyQt6.QtWidgets import QMessageBox, QTableWidgetItem, QFileDialog, QLineEdit, QApplication
 from data import ctasbancos
-from data.cartera import CarteraDataAC, CarteraDataCM
+from data.cartera import CarteraDataAC, CarteraDataCM, CarteraDataGral
 from data.clientes import BuscarCliente, ClientesData
 from data.contratos import ContratosData
 from data.editcontrato import EditContratoData
@@ -99,6 +99,7 @@ class PantallaPrincipal():
         self.pp.actionRegistrar_Gastos.triggered.connect(self.abrir_form_gastos)
         self.pp.actionAlta_Prest_Serv.triggered.connect(self.abrir_form_alta_proveedor)
         self.pp.actionAlta_Empleado.triggered.connect(self.abrir_form_alta_empleado)
+        self.pp.actionReporte_Ingresos.triggered.connect(self.abrir_form_reporte_ingresos)
         self.pp.btnSalirPP.clicked.connect(self.salir_pp) 
     
     
@@ -2107,8 +2108,279 @@ class PantallaPrincipal():
         else:
             self.fexp.label_proveedor.setText("Proveedor")
             self.set_cmb_proveedor()    
-         
+
+
+#########################################REPORTE INGRESOS############################################################
+    def abrir_form_reporte_ingresos(self):
+        self.frexp=uic.loadUi(self.resource_path("gui/formReporteIngresos.ui"))
+        self.frexp.setWindowTitle("Reporte de Ingresos")
+        self.frexp.show()
+        self.frexp.btnBuscar.clicked.connect(self.abrir_form_consultar)
+        #self.frexp.btnLimpiar.clicked.connect(self.limpiar_campos())
+        #self.frexp.btnEliminar.clicked.connect(self.eliminar_registro())
+        #self.frexp.btnBajar_info.clicked.connect(self.bajar_info())
+        self.frexp.btnSalir.clicked.connect(self.salir_form_reporte_ingresos)
+        
+    def salir_form_reporte_ingresos(self):
+        self.frexp.close()    
+    
+    def abrir_form_consultar(self):
+        self.fcon=uic.loadUi(self.resource_path("gui/formEncontrar_ing.ui"))
+        self.fcon.setWindowTitle("Opciones de Consulta")
+        self.fcon.show()
+        self.list_cmb_clientes()    
+        self.fcon.radioButton_cliente.setChecked(True)
+        self.fcon.lblCliente.setVisible(True)
+        self.fcon.cmbCliente.setVisible(True)
+        self.fcon.cmbCliente.setCurrentIndex(0)
+        self.fcon.cmb_tipo_ing.setCurrentIndex(0)
+        self.frexp.txt_form_flujo.setText("")
+        self.frexp.txtTotal.setText("") 
+        self.frexp.lbl_form_flujo.setText("Cliente") 
+        self.frexp.tblIngresos.clearContents()  
+        self.fcon.radioButton_tipo_ing.clicked.connect(self.opciones_consulta)
+        self.fcon.radioButton_cliente.clicked.connect(self.opciones_consulta)
+        self.fcon.radioButton_fechas.clicked.connect(self.opciones_consulta)
+        self.fcon.radioButton_tipo_cartera.clicked.connect(self.opciones_consulta)
+        self.fcon.btnConsultar.clicked.connect(self.mostrar_info)   
+        self.fcon.btnSalir.clicked.connect(self.salir_form_consultar)
+        
+    def opciones_consulta(self):
+        if  self.fcon.radioButton_cliente.isChecked():
+            self.fcon.cmbCliente.setCurrentIndex(0)
+            self.fcon.lblCliente.setVisible(True)
+            self.fcon.cmbCliente.setVisible(True)
+            self.fcon.cmb_tipo_ing.setVisible(False)
+            self.fcon.lblTipo_ingreso.setVisible(False)
+            self.fcon.lblFecha_inicial.setVisible(False)
+            self.fcon.lclFecha_final.setVisible(False)
+            self.fcon.dateEdit_fecha_ini.setVisible(False)
+            self.fcon.dateEdit_fecha_fin.setVisible(False)
+            self.fcon.cmb_tipo_cartera.setVisible(False)
+            self.fcon.lblTipo_cartera.setVisible(False)
+            self.fcon.groupBox_2.setTitle("Cliente")
+            self.list_cmb_clientes()   
+                     
+        elif self.fcon.radioButton_tipo_ing.isChecked():
+            self.fcon.cmb_tipo_ing.setCurrentIndex(0)
+            self.fcon.cmb_tipo_ing.setVisible(True)
+            self.fcon.lblTipo_ingreso.setVisible(True)
+            self.fcon.lblTipo_ingreso.setGeometry(270,140,71,16)
+            self.fcon.cmb_tipo_ing.setGeometry(270,158,290,30)    
+            self.fcon.lblCliente.setVisible(False)
+            self.fcon.cmbCliente.setVisible(False)
+            self.fcon.lblFecha_inicial.setVisible(False)
+            self.fcon.lclFecha_final.setVisible(False)
+            self.fcon.dateEdit_fecha_ini.setVisible(False)
+            self.fcon.dateEdit_fecha_fin.setVisible(False)
+            self.fcon.cmb_tipo_cartera.setVisible(False)
+            self.fcon.lblTipo_cartera.setVisible(False)
+            self.fcon.groupBox_2.setTitle("Tipo Pago")            
             
+        elif self.fcon.radioButton_fechas.isChecked():
+             self.fcon.lblFecha_inicial.setVisible(True)
+             self.fcon.lclFecha_final.setVisible(True)
+             self.fcon.dateEdit_fecha_ini.setVisible(True)
+             self.fcon.dateEdit_fecha_fin.setVisible(True)
+             self.fcon.lblFecha_inicial.setGeometry(270,140,71,16)
+             self.fcon.lclFecha_final.setGeometry(440,140,71,16)
+             self.fcon.dateEdit_fecha_ini.setGeometry(270,160,110,30)
+             self.fcon.dateEdit_fecha_fin.setGeometry(440,160,110,30)   
+             self.fcon.lblCliente.setVisible(False)
+             self.fcon.cmbCliente.setVisible(False)
+             self.fcon.cmb_tipo_ing.setVisible(False)
+             self.fcon.lblTipo_ingreso.setVisible(False)
+             self.fcon.cmb_tipo_cartera.setVisible(False)
+             self.fcon.lblTipo_cartera.setVisible(False)
+             self.fcon.groupBox_2.setTitle("Fechas")
+             
+        elif self.fcon.radioButton_tipo_cartera.isChecked():
+            self.fcon.cmb_tipo_cartera.setCurrentIndex(0)
+            self.fcon.cmb_tipo_cartera.setVisible(True)
+            self.fcon.lblTipo_cartera.setVisible(True)
+            self.fcon.lblTipo_cartera.setGeometry(270,140,71,16)
+            self.fcon.cmb_tipo_cartera.setGeometry(270,158,290,30)
+            self.fcon.cmb_tipo_ing.setVisible(False)
+            self.fcon.lblTipo_ingreso.setVisible(False)
+            self.fcon.lblCliente.setVisible(False)
+            self.fcon.cmbCliente.setVisible(False)
+            self.fcon.lblFecha_inicial.setVisible(False)
+            self.fcon.lclFecha_final.setVisible(False)
+            self.fcon.dateEdit_fecha_ini.setVisible(False)
+            self.fcon.dateEdit_fecha_fin.setVisible(False)
+            self.fcon.groupBox_2.setTitle("Tipo Cartera")                 
+           
+    def list_cmb_clientes(self):    
+        search=ClientesData()
+        data=search.lista_clientes()
+        for item in data:
+            self.fcon.cmbCliente.addItem(item[1])
+        
+    def mostrar_info(self):
+        if self.fcon.radioButton_cliente.isChecked():
+            if self.fcon.cmbCliente.currentIndex()==0:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Ingresos")
+                m.setText("Selecciona una Opcion")
+                m.exec()
+            else:
+                search=CarteraDataGral()
+                data=search.get_info_xcliente(self.fcon.cmbCliente.currentText(),'pago')
+                self.frexp.tblIngresos.setRowCount(len(data))
+                fila=0
+                saldo=0
+                if data==[]:
+                    m=QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("informacion flujo efectivo")
+                    m.setText("No hay informacion")
+                    m.exec()
+                    self.fcon.cmbCliente.setFocus()
+                else:
+                    for item in data:
+                        saldo += float(item[5])
+                        self.frexp.txtTotal.setText(f"{saldo:,.2f}")
+                        
+                    for item in data:
+                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(item[0]))
+                        self.frexp.tblIngresos.setItem(fila,1,QTableWidgetItem(item[1]))
+                        self.frexp.tblIngresos.setItem(fila,2,QTableWidgetItem(item[2]))
+                        self.frexp.tblIngresos.setItem(fila,3,QTableWidgetItem(item[3]))
+                        self.frexp.tblIngresos.setItem(fila,4,QTableWidgetItem(item[4]))
+                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(str(item[5])))
+                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(item[6]))
+                        fila+=1
+                    self.frexp.lbl_form_flujo.setText("Cliente")        
+                    self.frexp.txt_form_flujo.setText(self.fcon.cmbCliente.currentText()) 
+                    self.fcon.close()
+                    
+        elif self.fcon.radioButton_tipo_ing.isChecked():
+            if self.fcon.cmb_tipo_ing.currentIndex()==0:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Ingresos")
+                m.setText("Selecciona una Opcion")
+                m.exec()
+            else:
+                search=CarteraDataGral()
+                data=search.get_info_xtipo(self.fcon.cmb_tipo_ing.currentText())
+                self.frexp.tblIngresos.setRowCount(len(data))
+                fila=0
+                saldo=0
+                if data==[]:
+                    m=QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("informacion flujo efectivo")
+                    m.setText("No hay informacion")
+                    m.exec()
+                    self.fcon.cmb_tipo_ing.setFocus()
+                else:
+                    for item in data:
+                        saldo += float(item[5])
+                        self.frexp.txtTotal.setText(f"{saldo:,.2f}")
+                        
+                    for item in data:
+                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(item[0]))
+                        self.frexp.tblIngresos.setItem(fila,1,QTableWidgetItem(item[1]))
+                        self.frexp.tblIngresos.setItem(fila,2,QTableWidgetItem(item[2]))
+                        self.frexp.tblIngresos.setItem(fila,3,QTableWidgetItem(item[3]))
+                        self.frexp.tblIngresos.setItem(fila,4,QTableWidgetItem(item[4]))
+                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(str(item[5])))
+                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(item[6]))
+                        fila+=1
+                    self.frexp.lbl_form_flujo.setText("Tipo Pago")                
+                    self.frexp.txt_form_flujo.setText(self.fcon.cmb_tipo_ing.currentText()) 
+                    self.fcon.close()
+                    
+        elif self.fcon.radioButton_fechas.isChecked():
+            fecha_Ini=self.fcon.dateEdit_fecha_ini.date().toString("yyyy-MM-dd")
+            fecha_Fin=self.fcon.dateEdit_fecha_fin.date().toString("yyyy-MM-dd")
+            
+            
+            if fecha_Ini > fecha_Fin or fecha_Fin < fecha_Ini:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Ingresos")
+                m.setText("Fechas incorrectas")
+                m.exec()
+            elif fecha_Ini == fecha_Fin:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Ingresos")
+                m.setText("Fechas iguales")
+                m.exec()    
+            else:
+                search=CarteraDataGral()
+                data=search.get_info_xfechas('pago',fecha_Ini,fecha_Fin)
+                self.frexp.tblIngresos.setRowCount(len(data))
+                fila=0
+                saldo=0
+                if data==[]:
+                    m=QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("informacion flujo efectivo")
+                    m.setText("No hay informacion")
+                    m.exec()
+                    #self.fcon.dateEdit_fecha_ini.setFocus()
+                else:
+                    for item in data:
+                        saldo += float(item[5])
+                        self.frexp.txtTotal.setText(f"{saldo:,.2f}")
+                        
+                    for item in data:
+                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(item[0]))
+                        self.frexp.tblIngresos.setItem(fila,1,QTableWidgetItem(item[1]))
+                        self.frexp.tblIngresos.setItem(fila,2,QTableWidgetItem(item[2]))
+                        self.frexp.tblIngresos.setItem(fila,3,QTableWidgetItem(item[3]))
+                        self.frexp.tblIngresos.setItem(fila,4,QTableWidgetItem(item[4]))
+                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(str(item[5])))
+                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(item[6]))
+                        fila+=1
+                    self.frexp.lbl_form_flujo.setText("Fechas")                
+                    self.frexp.txt_form_flujo.setText(f" entre {fecha_Ini} y {fecha_Fin}") 
+                    self.fcon.close()
+                                
+        elif self.fcon.radioButton_tipo_cartera.isChecked():
+            if self.fcon.cmb_tipo_cartera.currentIndex()==0:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Ingresos")
+                m.setText("Selecciona una Opcion")
+                m.exec()
+            else:
+                search=CarteraDataGral()
+                data=search.get_info_xtipo_cartera('pago',self.fcon.cmb_tipo_cartera.currentText())
+                self.frexp.tblIngresos.setRowCount(len(data))
+                fila=0
+                saldo=0
+                if data==[]:
+                    m=QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("informacion flujo efectivo")
+                    m.setText("No hay informacion")
+                    m.exec()
+                    self.fcon.cmb_tipo_cartera.setFocus()
+                else:
+                    for item in data:
+                        saldo += float(item[5])
+                        self.frexp.txtTotal.setText(f"{saldo:,.2f}")
+                        
+                    for item in data:
+                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(item[0]))
+                        self.frexp.tblIngresos.setItem(fila,1,QTableWidgetItem(item[1]))
+                        self.frexp.tblIngresos.setItem(fila,2,QTableWidgetItem(item[2]))
+                        self.frexp.tblIngresos.setItem(fila,3,QTableWidgetItem(item[3]))
+                        self.frexp.tblIngresos.setItem(fila,4,QTableWidgetItem(item[4]))
+                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(str(item[5])))
+                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(item[6]))
+                        fila+=1
+                    self.frexp.lbl_form_flujo.setText("Tipo Cartera")                
+                    self.frexp.txt_form_flujo.setText(self.fcon.cmb_tipo_cartera.currentText()) 
+                    self.fcon.close()                             
+    
+    def salir_form_consultar(self):    
+        self.fcon.close()            
             
 #########################################REGISTRO GASTOS############################################################               
 
