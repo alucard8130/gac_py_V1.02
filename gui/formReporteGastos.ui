@@ -205,7 +205,7 @@ border-radius:5px;</string>
    <property name="frameShadow">
     <enum>QFrame::Shadow::Raised</enum>
    </property>
-   <widget class="QTableWidget" name="tblIngresos">
+   <widget class="QTableWidget" name="tblGastos">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -379,14 +379,14 @@ color: rgb(255, 78, 2);
 color: rgb(216, 224, 236);</string>
     </property>
     <property name="text">
-     <string> REPORTE FLUJO DE EFECTIVO</string>
+     <string> REPORTE EGRESOS (GASTOS )</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
     </property>
    </widget>
   </widget>
-  <widget class="QLineEdit" name="txtTotal">
+  <widget class="QLineEdit" name="txtTotal_g">
    <property name="geometry">
     <rect>
      <x>700</x>
@@ -412,7 +412,7 @@ border-radius:5px;</string>
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLineEdit" name="txt_form_flujo">
+  <widget class="QLineEdit" name="txt_form_gtos">
    <property name="geometry">
     <rect>
      <x>20</x>

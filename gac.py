@@ -20,7 +20,7 @@ from data.regempleado import RegEmpleadoData
 from data.regfacturas import RegFacturaData
 from data.reggastos import RegGastoData
 from data.reglocal import RegLocalData
-from data.regpagos import  RegCarteraData, RegCobranzaData
+from data.regpagos import   RegCarteraData, RegCobranzaData
 from data.ubicaciones import  AreasData, ListaAreasData, ListaCuotasData, UbicacionesData
 from data.usuario import UsuarioData
 from model.ctasbancos import Cuentas
@@ -70,7 +70,6 @@ class PantallaPrincipal():
         self.pp.btnRecuperar.setVisible(False) 
         self.pp.menubar.setVisible(False)
         self.pp.txtNameUser.setVisible(False)
-        #self.pp.btnReiniciar.setVisible(False)
         self.pp.btnEntrar.clicked.connect(self.validar_acceso)
         self.pp.btnNewUser.clicked.connect(self.select_new_user)
         self.pp.btnReg_new_user.setVisible(False)
@@ -82,7 +81,6 @@ class PantallaPrincipal():
         self.pp.actionRegMovCM.triggered.connect(self.abrir_form_PPCM)
         self.pp.actionRegMovAC.triggered.connect(self.abrir_form_PPAC)    
         self.pp.actionRegistrar_cliente.triggered.connect(self.abrir_form_clientes)
-        #self.pp.btnReiniciar.clicked.connect(self.reiniciar_sistema)
         self.pp.btnRecuperar.clicked.connect(self.recuperar_pass)
         self.pp.actionAltaLocal.triggered.connect(self.abrir_form_alta_local)
         self.pp.actionAltaAC.triggered.connect(self.abrir_form_alta_AC)
@@ -100,6 +98,7 @@ class PantallaPrincipal():
         self.pp.actionAlta_Prest_Serv.triggered.connect(self.abrir_form_alta_proveedor)
         self.pp.actionAlta_Empleado.triggered.connect(self.abrir_form_alta_empleado)
         self.pp.actionReporte_Ingresos.triggered.connect(self.abrir_form_reporte_ingresos)
+        self.pp.actionReporte_Gastos.triggered.connect(self.abrir_form_rep_gastos)
         self.pp.btnSalirPP.clicked.connect(self.salir_pp) 
     
     
@@ -2108,7 +2107,38 @@ class PantallaPrincipal():
         else:
             self.fexp.label_proveedor.setText("Proveedor")
             self.set_cmb_proveedor()    
+###########################################REPORTE GASTOS#################################################################################
+    def abrir_form_rep_gastos(self):
+        self.frg=uic.loadUi(self.resource_path("gui/formReporteGastos.ui"))
+        self.frg.setWindowTitle("Reporte de Gastos")
+        self.frg.show()
+        self.frg.btnBuscar.clicked.connect(self.open_form_search)
+        self.frg.btnSalir.clicked.connect(self.salir_form_frg)
+                                        
+    def open_form_search(self):
+        self.fsch=uic.loadUi(self.resource_path("gui/formEncontrar_Gtos.ui"))
+        self.fsch.setWindowTitle("Opciones de Consulta")
+        self.fsch.show()
+        self.set_cmb_prov()
+        self.fsch.radioButton_prov.setChecked(True)
+        self.fsch.lblProv.setVisible(True)
+        self.fsch.btnSalir.clicked.connect(self.ex_form_fsch)
 
+    def set_cmb_prov(self):
+        search=ProveedoresData()
+        data= search.lista_proveedores()
+        self.fsch.cmb_prov.clear()
+        for item in data:
+            self.fsch.cmb_prov.addItem(item[1])
+        
+    
+
+    def ex_form_fsch(self):
+        self.fsch.close()    
+    
+    
+    def salir_form_frg(self):
+        self.frg.close()
 
 #########################################REPORTE INGRESOS############################################################
     def abrir_form_reporte_ingresos(self):
@@ -2116,11 +2146,10 @@ class PantallaPrincipal():
         self.frexp.setWindowTitle("Reporte de Ingresos")
         self.frexp.show()
         self.frexp.btnBuscar.clicked.connect(self.abrir_form_consultar)
-        #self.frexp.btnLimpiar.clicked.connect(self.limpiar_campos())
-        #self.frexp.btnEliminar.clicked.connect(self.eliminar_registro())
-        #self.frexp.btnBajar_info.clicked.connect(self.bajar_info())
+        self.frexp.btnEliminar.clicked.connect(self.eliminar_registro)
+        self.frexp.btnBajar_info.clicked.connect(self.exp_infoI_excel)
         self.frexp.btnSalir.clicked.connect(self.salir_form_reporte_ingresos)
-        
+               
     def salir_form_reporte_ingresos(self):
         self.frexp.close()    
     
@@ -2165,8 +2194,8 @@ class PantallaPrincipal():
             self.fcon.cmb_tipo_ing.setCurrentIndex(0)
             self.fcon.cmb_tipo_ing.setVisible(True)
             self.fcon.lblTipo_ingreso.setVisible(True)
-            self.fcon.lblTipo_ingreso.setGeometry(270,140,71,16)
-            self.fcon.cmb_tipo_ing.setGeometry(270,158,290,30)    
+            self.fcon.lblTipo_ingreso.setGeometry(270,150,71,16)
+            self.fcon.cmb_tipo_ing.setGeometry(270,170,291,30)    
             self.fcon.lblCliente.setVisible(False)
             self.fcon.cmbCliente.setVisible(False)
             self.fcon.lblFecha_inicial.setVisible(False)
@@ -2239,17 +2268,18 @@ class PantallaPrincipal():
                     self.fcon.cmbCliente.setFocus()
                 else:
                     for item in data:
-                        saldo += float(item[5])
+                        saldo += float(item[6])
                         self.frexp.txtTotal.setText(f"{saldo:,.2f}")
                         
                     for item in data:
-                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(item[0]))
+                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(str(item[0])))
                         self.frexp.tblIngresos.setItem(fila,1,QTableWidgetItem(item[1]))
                         self.frexp.tblIngresos.setItem(fila,2,QTableWidgetItem(item[2]))
                         self.frexp.tblIngresos.setItem(fila,3,QTableWidgetItem(item[3]))
                         self.frexp.tblIngresos.setItem(fila,4,QTableWidgetItem(item[4]))
-                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(str(item[5])))
-                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(item[6]))
+                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(item[5]))
+                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(str(item[6])))
+                        self.frexp.tblIngresos.setItem(fila,7,QTableWidgetItem(item[7]))
                         fila+=1
                     self.frexp.lbl_form_flujo.setText("Cliente")        
                     self.frexp.txt_form_flujo.setText(self.fcon.cmbCliente.currentText()) 
@@ -2277,17 +2307,18 @@ class PantallaPrincipal():
                     self.fcon.cmb_tipo_ing.setFocus()
                 else:
                     for item in data:
-                        saldo += float(item[5])
+                        saldo += float(item[6])
                         self.frexp.txtTotal.setText(f"{saldo:,.2f}")
                         
                     for item in data:
-                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(item[0]))
+                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(str(item[0])))
                         self.frexp.tblIngresos.setItem(fila,1,QTableWidgetItem(item[1]))
                         self.frexp.tblIngresos.setItem(fila,2,QTableWidgetItem(item[2]))
                         self.frexp.tblIngresos.setItem(fila,3,QTableWidgetItem(item[3]))
                         self.frexp.tblIngresos.setItem(fila,4,QTableWidgetItem(item[4]))
-                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(str(item[5])))
-                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(item[6]))
+                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(item[5]))
+                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(str(item[6])))
+                        self.frexp.tblIngresos.setItem(fila,7,QTableWidgetItem(item[7]))
                         fila+=1
                     self.frexp.lbl_form_flujo.setText("Tipo Pago")                
                     self.frexp.txt_form_flujo.setText(self.fcon.cmb_tipo_ing.currentText()) 
@@ -2322,20 +2353,20 @@ class PantallaPrincipal():
                     m.setWindowTitle("informacion flujo efectivo")
                     m.setText("No hay informacion")
                     m.exec()
-                    #self.fcon.dateEdit_fecha_ini.setFocus()
                 else:
                     for item in data:
-                        saldo += float(item[5])
+                        saldo += float(item[6])
                         self.frexp.txtTotal.setText(f"{saldo:,.2f}")
                         
                     for item in data:
-                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(item[0]))
+                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(str(item[0])))
                         self.frexp.tblIngresos.setItem(fila,1,QTableWidgetItem(item[1]))
                         self.frexp.tblIngresos.setItem(fila,2,QTableWidgetItem(item[2]))
                         self.frexp.tblIngresos.setItem(fila,3,QTableWidgetItem(item[3]))
                         self.frexp.tblIngresos.setItem(fila,4,QTableWidgetItem(item[4]))
-                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(str(item[5])))
-                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(item[6]))
+                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(item[5]))
+                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(str(item[6])))
+                        self.frexp.tblIngresos.setItem(fila,7,QTableWidgetItem(item[7]))
                         fila+=1
                     self.frexp.lbl_form_flujo.setText("Fechas")                
                     self.frexp.txt_form_flujo.setText(f" entre {fecha_Ini} y {fecha_Fin}") 
@@ -2362,25 +2393,107 @@ class PantallaPrincipal():
                     m.exec()
                     self.fcon.cmb_tipo_cartera.setFocus()
                 else:
+                    
                     for item in data:
-                        saldo += float(item[5])
+                        saldo += float(item[6])
                         self.frexp.txtTotal.setText(f"{saldo:,.2f}")
                         
                     for item in data:
-                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(item[0]))
+                        self.frexp.tblIngresos.setItem(fila,0,QTableWidgetItem(str(item[0])))
                         self.frexp.tblIngresos.setItem(fila,1,QTableWidgetItem(item[1]))
                         self.frexp.tblIngresos.setItem(fila,2,QTableWidgetItem(item[2]))
                         self.frexp.tblIngresos.setItem(fila,3,QTableWidgetItem(item[3]))
                         self.frexp.tblIngresos.setItem(fila,4,QTableWidgetItem(item[4]))
-                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(str(item[5])))
-                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(item[6]))
+                        self.frexp.tblIngresos.setItem(fila,5,QTableWidgetItem(item[5]))
+                        self.frexp.tblIngresos.setItem(fila,6,QTableWidgetItem(str(item[6])))
+                        self.frexp.tblIngresos.setItem(fila,7,QTableWidgetItem(item[7]))
                         fila+=1
                     self.frexp.lbl_form_flujo.setText("Tipo Cartera")                
                     self.frexp.txt_form_flujo.setText(self.fcon.cmb_tipo_cartera.currentText()) 
                     self.fcon.close()                             
     
+    def eliminar_registro(self):
+        selected_row = self.frexp.tblIngresos.currentRow()
+        if selected_row == -1:
+            m = QMessageBox()
+            m.setIcon(QMessageBox.Icon.Warning)
+            m.setWindowTitle("Eliminar Registro")
+            m.setText("Seleccione un registro para eliminar")
+            m.exec()
+            return
+
+        id_registro = self.frexp.tblIngresos.item(selected_row, 0).text()
+        m = QMessageBox()
+        m.setIcon(QMessageBox.Icon.Warning)
+        m.setWindowTitle("Eliminar Registro")
+        m.setText(f"¿Está seguro de que desea eliminar el registro con factura {id_registro}?")
+        m.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        response = m.exec()
+
+        if response == QMessageBox.StandardButton.Yes:
+            objData = CarteraDataGral()
+            if objData.eliminar_regx_id(id_registro):
+                self.frexp.tblIngresos.removeRow(selected_row)
+                m = QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Eliminar Registro")
+                m.setText("Registro eliminado con éxito")
+                m.exec()
+                self.frexp.tblIngresos.clearContents()
+                self.frexp.txt_form_flujo.setText("")
+                self.frexp.txtTotal.setText("")
+            else:
+                m = QMessageBox()
+                m.setIcon(QMessageBox.Icon.Critical)
+                m.setWindowTitle("Eliminar Registro")
+                m.setText("Error al eliminar el registro")
+                m.exec()
+    
+    def exp_infoI_excel(self):
+        if self.frexp.tblIngresos.rowCount() > 0:
+            file_dialog = QFileDialog()
+            file_path, _ = file_dialog.getSaveFileName(self.frexp, "Guardar archivo", "", "Archivos Excel (*.xlsx);;Todos los archivos (*)")
+            
+            if file_path:
+                try:
+                    workbook = xlsxwriter.Workbook(file_path)
+                    worksheet = workbook.add_worksheet()
+                    worksheet.write(0, 0, "INFORMACION INGRESOS (FLUJO EFECTIVO)")
+                    worksheet.write(1, 0, "CONCEPTO: " + self.frexp.txt_form_flujo.text())
+                    worksheet.write(2, 0, "Total: " + self.frexp.txtTotal.text())
+                    
+                    headers = ["ID", "Tipo Cartera", "Tipo Pago","Factura", "Forma Pago","Cuenta Deposito", "Importe Pago", "Fecha"]
+                    for col_num, header in enumerate(headers):
+                        worksheet.write(4, col_num, header)
+                        for row_num in range(self.frexp.tblIngresos.rowCount()):
+                            for col_num in range(self.frexp.tblIngresos.columnCount()):
+                                worksheet.write(row_num + 5, col_num, self.frexp.tblIngresos.item(row_num, col_num).text())
+                    
+                    workbook.close()
+                    
+                    m = QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("Exportar a Excel")
+                    m.setText("Datos exportados exitosamente a Excel")
+                    m.exec()
+                except Exception as e:
+                    m = QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Critical)
+                    m.setWindowTitle("Error")
+                    m.setText(f"Error al exportar a Excel: {e}")
+                    m.exec()
+        else:
+            m = QMessageBox()
+            m.setIcon(QMessageBox.Icon.Warning)
+            m.setWindowTitle("Exportar a Excel")
+            m.setText("No hay datos para exportar")
+            m.exec()
+              
     def salir_form_consultar(self):    
-        self.fcon.close()            
+        self.fcon.close() 
+        
+        
+           
             
 #########################################REGISTRO GASTOS############################################################               
 
@@ -2390,7 +2503,7 @@ class PantallaPrincipal():
         m.setWindowTitle("Registro de Gasto")
         m.setStandardButtons(QMessageBox.StandardButton.Ok)
 
-        if self.fexp.cmbProveedor.currentIndex() == 0:
+        if self.fexp.cmb_proveedor.currentIndex() == 0:
             m.setText("Selecciona un proveedor")
             self.fexp.cmbProveedor.setFocus()
         elif self.fexp.txtImporte.text() == "":

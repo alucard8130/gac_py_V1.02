@@ -386,8 +386,7 @@ border-radius:5px;</string>
       <cursorShape>PointingHandCursor</cursorShape>
      </property>
      <property name="styleSheet">
-      <string notr="true">
-</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>
@@ -717,8 +716,8 @@ color: rgb(255, 255, 255);</string>
     <property name="title">
      <string>Otros Ingresos</string>
     </property>
-    <addaction name="actionReporte_Ingresos"/>
     <addaction name="actionRegistro_O_Ingresos"/>
+    <addaction name="actionReporte_Ingresos"/>
    </widget>
    <widget class="QMenu" name="menuCartera_Cobranza">
     <property name="title">

@@ -64,4 +64,3 @@ class Reg_Gasto():
         self._feGasto=f_gasto
         self._usuario=usuario
         self._feReg=f_reg
-   

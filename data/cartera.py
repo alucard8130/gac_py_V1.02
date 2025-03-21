@@ -34,7 +34,7 @@ class CarteraDataGral():
         self.db = con.Conexion().conectarBd()
         self.cursor= self.db.cursor()
         query= self.cursor.execute("""
-        SELECT tipo_cartera,tipo_cuota,num_fact,forma_pago,cta_banco,imp_pago,f_cobro_o_pago FROM cartera
+        SELECT id,tipo_cartera,tipo_cuota,num_fact,forma_pago,cta_banco,imp_pago,f_cobro_o_pago FROM cartera
         WHERE cliente_facturacion='{}' AND tipo_factura='{}'""".format(cliente,tipo_fact))
         serch_info=query.fetchall()
         self.db.close()    
@@ -44,7 +44,7 @@ class CarteraDataGral():
         self.db = con.Conexion().conectarBd()
         self.cursor= self.db.cursor()
         query= self.cursor.execute("""
-        SELECT tipo_cartera,tipo_cuota,num_fact,forma_pago,cta_banco,imp_pago,f_cobro_o_pago FROM cartera
+        SELECT id,tipo_cartera,tipo_cuota,num_fact,forma_pago,cta_banco,imp_pago,f_cobro_o_pago FROM cartera
         WHERE tipo_cuota='{}'""".format(tipo))
         serch_info=query.fetchall()
         self.db.close()    
@@ -54,7 +54,7 @@ class CarteraDataGral():
         self.db = con.Conexion().conectarBd()
         self.cursor= self.db.cursor()
         query= self.cursor.execute("""
-        SELECT tipo_cartera,tipo_cuota,num_fact,forma_pago,cta_banco,imp_pago,f_cobro_o_pago FROM cartera
+        SELECT id,tipo_cartera,tipo_cuota,num_fact,forma_pago,cta_banco,imp_pago,f_cobro_o_pago FROM cartera
         WHERE tipo_factura='{}' AND f_cobro_o_pago BETWEEN '{}' AND '{}'""".format(tipo,fecha_ini,fecha_fin))
         serch_info=query.fetchall()
         self.db.close()    
@@ -64,8 +64,18 @@ class CarteraDataGral():
         self.db = con.Conexion().conectarBd()
         self.cursor= self.db.cursor()
         query= self.cursor.execute("""
-        SELECT tipo_cartera,tipo_cuota,num_fact,forma_pago,cta_banco,imp_pago,f_cobro_o_pago FROM cartera
+        SELECT id,tipo_cartera,tipo_cuota,num_fact,forma_pago,cta_banco,imp_pago,f_cobro_o_pago FROM cartera
         WHERE tipo_factura='{}' AND tipo_cartera='{}'""".format(tipo_fact,tipo_cartera))
         serch_info=query.fetchall()
         self.db.close()    
         return(serch_info)
+    
+    def eliminar_regx_id(self, id_registro):
+        self.db = con.Conexion().conectarBd()
+        self.cursor = self.db.cursor()
+        self.cursor.execute("""
+        DELETE FROM cartera
+        WHERE id = '{}'""".format(id_registro))
+        self.db.commit()
+        self.db.close()
+        return True
