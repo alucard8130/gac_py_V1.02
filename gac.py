@@ -89,6 +89,7 @@ class PantallaPrincipal():
         self.pp.actionCarga_Areas_Comunes.triggered.connect(self.carga_areasC_bd)
         self.pp.actionCarga_Contratos.triggered.connect(self.carga_contratos_bd)
         self.pp.actionCarga_Saldos_Iniciales.triggered.connect(self.carga_saldos_iniciales_cartera)
+        self.pp.actionCarga_Empleados.triggered.connect(self.carga_empleados_bd)
         self.pp.toolButton.clicked.connect(self.mostrar_password)
         self.pp.actionRegCuentas.triggered.connect(self.abrir_form_banco)
         self.pp.actionRegContrato.triggered.connect(self.abrir_form_contratos)
@@ -144,7 +145,7 @@ class PantallaPrincipal():
                         else:
                             m.setText("clientes no registrados")
                 except Exception as e:
-                    m.setText(f"Error en la carga de clientes  : {e}")        
+                    m.setText(f"Error en la carga de clientes: \n{e}")        
         m.exec()               
                         
     def carga_ubicaciones_bd(self):
@@ -318,7 +319,55 @@ class PantallaPrincipal():
                 except Exception as e:
                     m.setText(f"Error en la carga de saldos iniciales: {e}")
         m.exec()                                      
+
+    def carga_empleados_bd(self):
+        m=QMessageBox()
+        m.setIcon(QMessageBox.Icon.Information)
+        m.setWindowTitle("Carga BD Empleados")
+        m.setStandardButtons(QMessageBox.StandardButton.Ok)
+        file_dialog = QFileDialog()
+        file_path, _ = file_dialog.getOpenFileName(self.pp, "Seleccionar archivo", "", "Archivos CSV (*.csv);;Todos los archivos (*)")
         
+        if file_path:
+            with open(file_path, newline='', encoding='utf-8') as csvfile:
+                reader = csv.reader(csvfile)
+                next(reader)  # Skip the header row
+                data = [row for row in reader]
+                try:
+                    for row in data:
+                        if len(row) != 19:
+                            m.setText("El archivo CSV no tiene el formato correcto")
+                            m.exec()
+                            return
+                        carga_empleados=RegEmpleado(
+                            nombres=row[1].upper(),
+                            apellido_pat=row[2].upper(),
+                            apellido_mat=row[3].upper(),
+                            rfc=row[4].upper(),
+                            curp=row[5].upper(),
+                            numnss=row[6],
+                            f_nacimiento=row[7],
+                            puesto=row[8],
+                            departamento=row[9],
+                            sueldo=row[10],
+                            direccion=row[11].upper(),
+                            telefono=row[12],
+                            email=row[13],
+                            f_ingreso=row[14],
+                            f_baja=row[15],
+                            status=row[16],
+                            usuario=row[17],
+                            f_reg=row[18]
+                            )
+                        objData = RegEmpleadoData()
+                        if objData.registrar(carga_empleados):
+                            m.setText("info empleados cargada con exito")
+                        else:
+                            m.seText("empleado no registrado")
+                except Exception as e:
+                    m.setText(f"Error en la carga de empleado: \n{e}")        
+        m.exec()                        
+                                                    
     def mostrar_panel(self):
         self.pp.lblImagen.setGeometry(9,9,680,690)
         self.pp.btnNewUser.setGeometry(110, 490, 250, 30)
@@ -2185,6 +2234,8 @@ class PantallaPrincipal():
         self.frg.setWindowTitle("Reporte de Gastos")
         self.frg.show()
         self.frg.btnBuscar.clicked.connect(self.open_form_search)
+        self.frg.btnEliminar.clicked.connect(self.eliminar_registroG)
+        self.frg.btnBajar_info.clicked.connect(self.exp_infoG_excel)
         self.frg.btnSalir.clicked.connect(self.salir_form_frg)
                                         
     def open_form_search(self):
@@ -2453,6 +2504,8 @@ class PantallaPrincipal():
                         self.frg.tblGastos.setItem(fila,5,QTableWidgetItem(item[5]))
                         self.frg.tblGastos.setItem(fila,6,QTableWidgetItem(str(item[6])))
                         self.frg.tblGastos.setItem(fila,7,QTableWidgetItem(item[7]))
+                        self.frg.tblGastos.setItem(fila,8,QTableWidgetItem(str(item[8])))
+                        self.frg.tblGastos.setItem(fila,9,QTableWidgetItem(str(item[9])))
                         fila+=1
                     self.frg.lbl_form_gtos.setText("Empleado")                
                     self.frg.txt_form_gtos.setText(self.fsch.cmb_empleados.currentText()) 
@@ -2463,11 +2516,87 @@ class PantallaPrincipal():
             m.setWindowTitle("Consulta Gastos")
             m.setText("Selecciona una opcion de busqueda")
             m.exec()
+
+    def eliminar_registroG(self):
+        selected_row = self.frg.tblGastos.currentRow()
+        if selected_row == -1:
+            m = QMessageBox()
+            m.setIcon(QMessageBox.Icon.Warning)
+            m.setWindowTitle("Eliminar Registro")
+            m.setText("Seleccione un registro para eliminar")
+            m.exec()
+            return
+
+        id_registro = self.frg.tblGastos.item(selected_row, 0).text()
+        m = QMessageBox()
+        m.setIcon(QMessageBox.Icon.Warning)
+        m.setWindowTitle("Eliminar Registro")
+        m.setText(f"¿Está seguro de que desea eliminar \nel registro con ID: {id_registro}?")
+        m.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        response = m.exec()
+
+        if response == QMessageBox.StandardButton.Yes:
+            objData = GastosDataGral()
+            if objData.eliminar_regx_id(id_registro):
+                self.frg.tblGastos.removeRow(selected_row)
+                m = QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Eliminar Registro")
+                m.setText("Registro eliminado con éxito")
+                m.exec()
+                self.frg.tblGastos.clearContents()
+                self.frg.txt_form_gtos.setText("")
+                self.frg.txtTotal_g.setText("")
+            else:
+                m = QMessageBox()
+                m.setIcon(QMessageBox.Icon.Critical)
+                m.setWindowTitle("Eliminar Registro")
+                m.setText("Error al eliminar el registro")
+                m.exec()
+
+    def exp_infoG_excel(self):
+        if self.frg.tblGastos.rowCount() > 0:
+            file_dialog = QFileDialog()
+            file_path, _ = file_dialog.getSaveFileName(self.frg, "Guardar archivo", "", "Archivos Excel (*.xlsx);;Todos los archivos (*)")
+            
+            if file_path:
+                try:
+                    workbook = xlsxwriter.Workbook(file_path)
+                    worksheet = workbook.add_worksheet()
+                    worksheet.write(0, 0, "INFORMACION GASTOS (EGRESOS)")
+                    worksheet.write(1, 0, "CONCEPTO: " + self.frg.txt_form_gtos.text())
+                    worksheet.write(2, 0, "Total: " + self.frg.txtTotal_g.text())
+                    
+                    headers = ["ID", "Factura/Recibo","Prov/Emp", "Tipo Gasto","Concepto", "Forma Pago", "Importe Pago", "Fecha","IVA ret","ISR ret"]
+                    for col_num, header in enumerate(headers):
+                        worksheet.write(4, col_num, header)
+                        for row_num in range(self.frg.tblGastos.rowCount()):
+                            for col_num in range(self.frg.tblGastos.columnCount()):
+                                worksheet.write(row_num + 5, col_num, self.frg.tblGastos.item(row_num, col_num).text())
+                    
+                    workbook.close()
+                    
+                    m = QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("Exportar a Excel")
+                    m.setText("Datos exportados exitosamente a Excel")
+                    m.exec()
+                except Exception as e:
+                    m = QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Critical)
+                    m.setWindowTitle("Error")
+                    m.setText(f"Error al exportar a Excel: {e}")
+                    m.exec()
+        else:
+            m = QMessageBox()
+            m.setIcon(QMessageBox.Icon.Warning)
+            m.setWindowTitle("Exportar a Excel")
+            m.setText("No hay datos para exportar")
+            m.exec()
     
     def ex_form_fsch(self):
         self.fsch.close()    
-    
-    
+        
     def salir_form_frg(self):
         self.frg.close()
 
@@ -2477,7 +2606,7 @@ class PantallaPrincipal():
         self.frexp.setWindowTitle("Reporte de Ingresos")
         self.frexp.show()
         self.frexp.btnBuscar.clicked.connect(self.abrir_form_consultar)
-        self.frexp.btnEliminar.clicked.connect(self.eliminar_registro)
+        self.frexp.btnEliminar.clicked.connect(self.eliminar_registroI)
         self.frexp.btnBajar_info.clicked.connect(self.exp_infoI_excel)
         self.frexp.btnSalir.clicked.connect(self.salir_form_reporte_ingresos)
                
@@ -2749,9 +2878,8 @@ class PantallaPrincipal():
             m.setWindowTitle("informacion Ingresos")
             m.setText("Selecciona una opcion de busqueda")
             m.exec()
-            
-            
-    def eliminar_registro(self):
+                       
+    def eliminar_registroI(self):
         selected_row = self.frexp.tblIngresos.currentRow()
         if selected_row == -1:
             m = QMessageBox()
@@ -2953,14 +3081,14 @@ class PantallaPrincipal():
             m.setText("Captura solo números")
             self.femp.txtCel.setText("55")
             self.femp.txtCel.setFocus()
-        elif self.femp.txtCel.length() < 10:
+        elif len (self.femp.txtCel.text()) < 10:
             m.setText("Captura un teléfono válido")
             self.femp.txtCel.setText("55")
             self.femp.txtCel.setFocus()    
         elif self.femp.txtNSS.text()=="":
             m.setText("Captura el numero de seguridad social")
             self.femp.txtNSS.setFocus()
-        elif not self.txtNSS.text().isnumeric():
+        elif not self.femp.txtNSS.text().isnumeric():
             m.setText("Captura solo números")
             self.femp.txtNSS.setFocus()    
         elif self.femp.cmbPuesto.currentIndex() == 0:
@@ -3012,6 +3140,7 @@ class PantallaPrincipal():
         self.femp.txtApellidoP.setText("")
         self.femp.txtRFC.setText("")
         self.femp.txtCURP.setText("")
+        self.femp.txtNSS.setText("")
         self.femp.txtDireccion.setText("")
         self.femp.txtCel.setText("")
         self.femp.txtEmail.setText("")
@@ -3026,11 +3155,6 @@ class PantallaPrincipal():
 
 
 
-
-
-    # def reiniciar_sistema(self):
-    #     self.pp.close()
-    #     os.system("python gac.py")
     
 if __name__ == "__main__":
     app = QApplication(sys.argv)

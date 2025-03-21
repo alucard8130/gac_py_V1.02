@@ -751,6 +751,7 @@ color: rgb(255, 255, 255);</string>
     <addaction name="actionCarga_Clientes"/>
     <addaction name="actionCarga_Contratos"/>
     <addaction name="actionCarga_Saldos_Iniciales"/>
+    <addaction name="actionCarga_Empleados"/>
     <addaction name="actionRegCuentas"/>
    </widget>
    <addaction name="menuLocales_Comerciales"/>
@@ -987,6 +988,11 @@ color: rgb(255, 255, 255);</string>
   <action name="actionBuscar_Contratos">
    <property name="text">
     <string>Buscar Contratos</string>
+   </property>
+  </action>
+  <action name="actionCarga_Empleados">
+   <property name="text">
+    <string>Carga Empleados</string>
    </property>
   </action>
  </widget>

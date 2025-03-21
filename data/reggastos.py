@@ -49,9 +49,18 @@ class GastosDataGral():
         self.db = con.Conexion().conectarBd()
         self.cursor= self.db.cursor()
         query= self.cursor.execute("""
-        SELECT gastos.id,gastos.num_factura,gastos.proveedor_name,gastos.tipo_gasto,gastos.descripcion_gasto,gastos.forma_pago,gastos.importe_pago,gastos.fecha_gasto,gastos.iva_ret,gastos.isr_ret, empleados.rfc FROM gastos
-        INNER JOIN empleados ON gastos.id = empleados.id
+        SELECT id,num_factura,proveedor_name,tipo_gasto,descripcion_gasto,forma_pago,importe_pago,fecha_gasto,iva_ret,isr_ret FROM gastos
         WHERE gastos.proveedor_name ='{}'""".format(empleado))
         serch_info=query.fetchall()
         self.db.close()    
         return(serch_info)
+    
+    def eliminar_regx_id(self, id_registro):
+        self.db = con.Conexion().conectarBd()
+        self.cursor = self.db.cursor()
+        self.cursor.execute("""
+        DELETE FROM gastos
+        WHERE id = '{}'""".format(id_registro))
+        self.db.commit()
+        self.db.close()
+        return True
