@@ -100,6 +100,7 @@ class PantallaPrincipal():
         self.pp.actionAlta_Empleado.triggered.connect(self.abrir_form_alta_empleado)
         self.pp.actionReporte_Ingresos.triggered.connect(self.abrir_form_reporte_ingresos)
         self.pp.actionReporte_Gastos.triggered.connect(self.abrir_form_rep_gastos)
+        self.pp.actionLocales_Comerciales.triggered.connect(self.form_incre_cuotas)
         self.pp.btnSalirPP.clicked.connect(self.salir_pp) 
     
     
@@ -3151,8 +3152,11 @@ class PantallaPrincipal():
     def salir_form_empleados(self):
         self.femp.close()
     
-#############################BUSCAR Y EDITAR EMPLEADOS###########################################
-
+#############################ACTUALIZAR CUOTAS  (INCREMENTAR)###########################################
+    def form_incre_cuotas(self):
+        self.finc=uic.loadUi(self.resource_path("gui/formIncreCuotas.ui"))
+        self.finc.setWindowTitle("Actualizar Cuotas")
+        self.finc.show()
 
 
     

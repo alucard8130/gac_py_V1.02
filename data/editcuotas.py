@@ -2,7 +2,7 @@ import conexion_db as con
 from model.editcuotas import EditCuotasLocales
 
 
-class UpdateCuotasData():
+class CuotasDataGral():
     def editar(self, info:EditCuotasLocales):
         self.bd = con.Conexion().conectarBd()
         self.cursor = self.bd.cursor()
