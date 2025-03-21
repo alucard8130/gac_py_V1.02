@@ -291,27 +291,22 @@ border-radius:5px;</string>
     </column>
     <column>
      <property name="text">
-      <string>Tipo Cartera</string>
+      <string>Factura/Recibo</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Tipo de Pago</string>
+      <string>Prov/Emp</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Factura</string>
+      <string>Tipo Gasto</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Forma de Pago</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Cuenta Deposito</string>
+      <string>Concepto</string>
      </property>
      <property name="font">
       <font>
@@ -322,12 +317,27 @@ border-radius:5px;</string>
     </column>
     <column>
      <property name="text">
+      <string>Forma de Pago</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>Importe</string>
      </property>
     </column>
     <column>
      <property name="text">
       <string>Fecha Pago</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Iva ret</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Isr ret</string>
      </property>
     </column>
    </widget>
@@ -438,7 +448,7 @@ border-radius:5px;</string>
     <bool>true</bool>
    </property>
   </widget>
-  <widget class="QLabel" name="lbl_form_flujo">
+  <widget class="QLabel" name="lbl_form_gtos">
    <property name="geometry">
     <rect>
      <x>20</x>
@@ -455,7 +465,7 @@ border-radius:5px;</string>
     </font>
    </property>
    <property name="text">
-    <string>Cliente</string>
+    <string>Proveedor</string>
    </property>
    <property name="alignment">
     <set>Qt::AlignmentFlag::AlignBottom|Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft</set>

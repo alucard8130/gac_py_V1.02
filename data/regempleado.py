@@ -23,7 +23,4 @@ class RegEmpleadoData():
             return True
         else:
             return False
-            
         
-        
-                

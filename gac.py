@@ -16,9 +16,9 @@ from data.regcliente import RegClienteData
 from data.regcontrato import RegContratoData
 from data.proveedores import ProveedoresData
 from data.regctabancos import RegCtasBancoData
-from data.regempleado import RegEmpleadoData
+from data.regempleado import  RegEmpleadoData
 from data.regfacturas import RegFacturaData
-from data.reggastos import RegGastoData
+from data.reggastos import GastosDataGral, RegGastoData
 from data.reglocal import RegLocalData
 from data.regpagos import   RegCarteraData, RegCobranzaData
 from data.ubicaciones import  AreasData, ListaAreasData, ListaCuotasData, UbicacionesData
@@ -2090,6 +2090,7 @@ class PantallaPrincipal():
         search=ProveedoresData()
         data=search.lista_empleados()
         self.fexp.cmbProveedor.clear()
+        self.fexp.cmbProveedor.addItem("---Seleccione una opción---")
         for item in data:
             self.fexp.cmbProveedor.addItem(f"{item[1]} {item[2]} {item[3]}")
     
@@ -2097,6 +2098,7 @@ class PantallaPrincipal():
         search=ProveedoresData()
         data=search.lista_proveedores()
         self.fexp.cmbProveedor.clear()
+        self.fexp.cmbProveedor.addItem("---Seleccione una opción---")
         for item in data:
             self.fexp.cmbProveedor.addItem(item[1]) 
      
@@ -2106,7 +2108,77 @@ class PantallaPrincipal():
             self.set_cmb_empleados()
         else:
             self.fexp.label_proveedor.setText("Proveedor")
-            self.set_cmb_proveedor()    
+            self.set_cmb_proveedor()
+
+#########################################REGISTRO GASTOS############################################################               
+
+    def registrar_gasto(self):
+        m = QMessageBox()
+        m.setIcon(QMessageBox.Icon.Information)
+        m.setWindowTitle("Registro de Gasto")
+        m.setStandardButtons(QMessageBox.StandardButton.Ok)
+
+        if self.fexp.cmbProveedor.currentIndex() == 0:
+            m.setText("Selecciona un proveedor")
+            self.fexp.cmbProveedor.setFocus()
+        elif self.fexp.txtImporte.text() == "":
+            m.setText("Captura el importe del gasto")
+            self.fexp.txtImporte.setFocus()
+        elif not self.fexp.txtImporte.text().replace('.', '', 1).isnumeric():
+            m.setText("Captura solo números en el importe")
+            self.fexp.txtImporte.setText("")
+            self.fexp.txtImporte.setFocus()
+        elif self.fexp.txtDescripcion.toPlainText() == "":
+            m.setText("Captura el concepto del gasto")
+            self.fexp.txtDescripcion.setFocus()
+        elif self.fexp.cmbFormaPago.currentIndex() == 0:
+            m.setText("Selecciona una forma de pago")
+            self.fexp.cmbFormaPago.setFocus()
+        elif self.fexp.cmbTipoGasto.currentIndex() == 0:
+            m.setText("Selecciona un tipo de gasto")
+            self.fexp.cmbTipoGasto.setFocus()
+        elif self.fexp.txtnFactura.text() == "":
+            m.setText("Captura el número de factura")
+            self.fexp.txtnFactura.setFocus()        
+        else:
+            regGasto = Reg_Gasto(
+                num_fact=self.fexp.txtnFactura.text().upper(),
+                n_proveedor=self.fexp.cmbProveedor.currentText(),
+                t_gasto=self.fexp.cmbTipoGasto.currentText(),
+                desc_gasto=self.fexp.txtDescripcion.toPlainText(),
+                f_pago=self.fexp.cmbFormaPago.currentText(),
+                n_cheque=self.fexp.txtn_cheque.text().upper(),
+                i_pago=float(self.fexp.txtImporte.text()),
+                iva_ret=float(self.fexp.txtIVA_ret.text()),
+                isr_ret=float(self.fexp.txtISR_ret.text()),
+                f_gasto=self.fexp.boxDate.date().toString("yyyy-MM-dd"),
+                usuario=self.pp.lblName_User.text(),
+                f_reg=current_datetime.strftime("%Y-%m-%d %H:%M:%S")
+                )
+            objData = RegGastoData()
+            if objData._registrar(info=regGasto):
+                m.setText("Gasto registrado con éxito")
+                self.limpiar_campos_fexp()
+            else:
+                m.setText("Error al registrar el gasto")
+                self.limpiar_campos_fexp()
+        m.exec()
+
+    def limpiar_campos_fexp(self):
+        self.fexp.cmbProveedor.setCurrentIndex(0)
+        self.fexp.txtnFactura.setText("")
+        self.fexp.cmbTipoGasto.setCurrentIndex(0)
+        self.fexp.txtDescripcion.setText("")
+        self.fexp.cmbFormaPago.setCurrentIndex(0)
+        self.fexp.txtn_cheque.setText("")
+        self.fexp.txtImporte.setText("")
+        self.fexp.txtIVA_ret.setText("")
+        self.fexp.txtISR_ret.setText("")
+    
+    def salir_form_gastos(self):
+        self.fexp.close()
+ 
+                
 ###########################################REPORTE GASTOS#################################################################################
     def abrir_form_rep_gastos(self):
         self.frg=uic.loadUi(self.resource_path("gui/formReporteGastos.ui"))
@@ -2119,20 +2191,279 @@ class PantallaPrincipal():
         self.fsch=uic.loadUi(self.resource_path("gui/formEncontrar_Gtos.ui"))
         self.fsch.setWindowTitle("Opciones de Consulta")
         self.fsch.show()
-        self.set_cmb_prov()
-        self.fsch.radioButton_prov.setChecked(True)
         self.fsch.lblProv.setVisible(True)
+        self.fsch.cmb_prov.setVisible(True)
+        self.fsch.cmb_prov.setCurrentIndex(0)
+        self.fsch.cmb_tipo_gtos.setCurrentIndex(0)
+        self.fsch.cmb_empleados.setCurrentIndex(0)
+        self.frg.txtTotal_g.setText("")
+        self.frg.lbl_form_gtos.setText("Proveedor")
+        self.frg.tblGastos.clearContents()
+        self.fsch.radioButton_emp.clicked.connect(self.opciones_consultaG)
+        self.fsch.radioButton_prov.clicked.connect(self.opciones_consultaG)
+        self.fsch.radioButton_fechas.clicked.connect(self.opciones_consultaG)
+        self.fsch.radioButton_tgasto.clicked.connect(self.opciones_consultaG)
+        self.fsch.btnConsultar.clicked.connect(self.mostrar_infoG)
         self.fsch.btnSalir.clicked.connect(self.ex_form_fsch)
-
-    def set_cmb_prov(self):
+        
+    def opciones_consultaG(self):
+        #xProveedor
+        if  self.fsch.radioButton_prov.isChecked():
+            self.fsch.lblProv.setVisible(True)
+            self.fsch.cmb_prov.setVisible(True)
+            self.fsch.cmb_tipo_gtos.setVisible(False)
+            self.fsch.lblTipo_Gtos.setVisible(False)
+            self.fsch.lblFecha_inicial.setVisible(False)
+            self.fsch.lclFecha_final.setVisible(False)
+            self.fsch.dateEdit_fecha_ini.setVisible(False)
+            self.fsch.dateEdit_fecha_fin.setVisible(False)
+            self.fsch.cmb_empleados.setVisible(False)
+            self.fsch.lblTrabajador.setVisible(False)
+            self.fsch.groupBox_2.setTitle("Proveedor")
+            self.list_prov()   
+                     
+        elif self.fsch.radioButton_tgasto.isChecked():
+            self.fsch.cmb_tipo_gtos.setVisible(True)
+            self.fsch.lblTipo_Gtos.setVisible(True)
+            self.fsch.lblTipo_Gtos.setGeometry(270,150,71,16)
+            self.fsch.cmb_tipo_gtos.setGeometry(270,170,291,30)    
+            self.fsch.lblProv.setVisible(False)
+            self.fsch.cmb_prov.setVisible(False)
+            self.fsch.lblFecha_inicial.setVisible(False)
+            self.fsch.lclFecha_final.setVisible(False)
+            self.fsch.dateEdit_fecha_ini.setVisible(False)
+            self.fsch.dateEdit_fecha_fin.setVisible(False)
+            self.fsch.cmb_empleados.setVisible(False)
+            self.fsch.lblTrabajador.setVisible(False)
+            self.fsch.groupBox_2.setTitle("Tipo Gasto")            
+            
+        elif self.fsch.radioButton_fechas.isChecked():
+             self.fsch.lblFecha_inicial.setVisible(True)
+             self.fsch.lclFecha_final.setVisible(True)
+             self.fsch.dateEdit_fecha_ini.setVisible(True)
+             self.fsch.dateEdit_fecha_fin.setVisible(True)
+             self.fsch.lblFecha_inicial.setGeometry(270,140,71,16)
+             self.fsch.lclFecha_final.setGeometry(440,140,71,16)
+             self.fsch.dateEdit_fecha_ini.setGeometry(270,160,110,30)
+             self.fsch.dateEdit_fecha_fin.setGeometry(440,160,110,30)   
+             self.fsch.lblProv.setVisible(False)
+             self.fsch.cmb_prov.setVisible(False)
+             self.fsch.cmb_tipo_gtos.setVisible(False)
+             self.fsch.lblTipo_Gtos.setVisible(False)
+             self.fsch.cmb_empleados.setVisible(False)
+             self.fsch.lblTrabajador.setVisible(False)
+             self.fsch.groupBox_2.setTitle("Fechas")
+             
+        elif self.fsch.radioButton_emp.isChecked():
+            self.fsch.cmb_empleados.setVisible(True)
+            self.fsch.lblTrabajador.setVisible(True)
+            self.fsch.lblTrabajador.setGeometry(270,140,71,16)
+            self.fsch.cmb_empleados.setGeometry(270,158,290,30)
+            self.fsch.cmb_tipo_gtos.setVisible(False)
+            self.fsch.lblTipo_Gtos.setVisible(False)
+            self.fsch.lblProv.setVisible(False)
+            self.fsch.cmb_prov.setVisible(False)
+            self.fsch.lblFecha_inicial.setVisible(False)
+            self.fsch.lclFecha_final.setVisible(False)
+            self.fsch.dateEdit_fecha_ini.setVisible(False)
+            self.fsch.dateEdit_fecha_fin.setVisible(False)
+            self.fsch.groupBox_2.setTitle("Empleado")  
+            self.list_empleados() 
+              
+    def list_prov(self):
         search=ProveedoresData()
         data= search.lista_proveedores()
         self.fsch.cmb_prov.clear()
+        self.fsch.cmb_prov.addItem("---Seleccione una opción---")
         for item in data:
             self.fsch.cmb_prov.addItem(item[1])
-        
     
-
+    def list_empleados(self):
+        search=ProveedoresData()
+        data=search.lista_empleados()
+        self.fsch.cmb_empleados.clear()
+        self.fsch.cmb_empleados.addItem("---Seleccione una opción---")
+        for item in data:
+            self.fsch.cmb_empleados.addItem(f"{item[1]} {item[2]} {item[3]}")
+            
+    def mostrar_infoG(self):
+        if self.fsch.radioButton_prov.isChecked():
+            if self.fsch.cmb_prov.currentIndex()==0:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Gastos")
+                m.setText("Selecciona una Opcion")
+                m.exec()
+            else:
+                search=GastosDataGral()
+                data=search.get_infox_prov(self.fsch.cmb_prov.currentText())
+                self.frg.tblGastos.setRowCount(len(data))
+                fila=0
+                saldo=0
+                if data==[]:
+                    m=QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("Consultar x Proveedor")
+                    m.setText("No hay informacion")
+                    m.exec()
+                    self.fsch.cmb_prov.setFocus()
+                else:
+                    for item in data:
+                        saldo += float(item[6])
+                        self.frg.txtTotal_g.setText(f"{saldo:,.2f}")
+                        
+                    for item in data:
+                        self.frg.tblGastos.setItem(fila,0,QTableWidgetItem(str(item[0])))
+                        self.frg.tblGastos.setItem(fila,1,QTableWidgetItem(item[1]))
+                        self.frg.tblGastos.setItem(fila,2,QTableWidgetItem(item[2]))
+                        self.frg.tblGastos.setItem(fila,3,QTableWidgetItem(item[3]))
+                        self.frg.tblGastos.setItem(fila,4,QTableWidgetItem(item[4]))
+                        self.frg.tblGastos.setItem(fila,5,QTableWidgetItem(item[5]))
+                        self.frg.tblGastos.setItem(fila,6,QTableWidgetItem(str(item[6])))
+                        self.frg.tblGastos.setItem(fila,7,QTableWidgetItem(item[7]))
+                        self.frg.tblGastos.setItem(fila,8,QTableWidgetItem(str(item[8])))
+                        self.frg.tblGastos.setItem(fila,9,QTableWidgetItem(str(item[9])))
+                        fila+=1
+                    self.frg.lbl_form_gtos.setText("Proveedor")        
+                    self.frg.txt_form_gtos.setText(self.fsch.cmb_prov.currentText()) 
+                    self.fsch.close()
+                    
+        elif self.fsch.radioButton_tgasto.isChecked():
+            if self.fsch.cmb_tipo_gtos.currentIndex()==0:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Gastos")
+                m.setText("Selecciona una Opcion")
+                m.exec()
+            else:
+                search=GastosDataGral()
+                data=search.get_infox_tipoG(self.fsch.cmb_tipo_gtos.currentText())
+                self.frg.tblGastos.setRowCount(len(data))
+                fila=0
+                saldo=0
+                if data==[]:
+                    m=QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("Consultar x Tipo Gasto")
+                    m.setText("No hay informacion")
+                    m.exec()
+                    self.fsch.cmb_tipo_gtos.setFocus()
+                else:
+                    for item in data:
+                        saldo += float(item[6])
+                        self.frg.txtTotal_g.setText(f"{saldo:,.2f}")
+                        
+                    for item in data:
+                        self.frg.tblGastos.setItem(fila,0,QTableWidgetItem(str(item[0])))
+                        self.frg.tblGastos.setItem(fila,1,QTableWidgetItem(item[1]))
+                        self.frg.tblGastos.setItem(fila,2,QTableWidgetItem(item[2]))
+                        self.frg.tblGastos.setItem(fila,3,QTableWidgetItem(item[3]))
+                        self.frg.tblGastos.setItem(fila,4,QTableWidgetItem(item[4]))
+                        self.frg.tblGastos.setItem(fila,5,QTableWidgetItem(item[5]))
+                        self.frg.tblGastos.setItem(fila,6,QTableWidgetItem(str(item[6])))
+                        self.frg.tblGastos.setItem(fila,7,QTableWidgetItem(item[7]))
+                        self.frg.tblGastos.setItem(fila,8,QTableWidgetItem(str(item[8])))
+                        self.frg.tblGastos.setItem(fila,9,QTableWidgetItem(str(item[9])))
+                        fila+=1
+                    self.frg.lbl_form_gtos.setText("Tipo Gasto")                
+                    self.frg.txt_form_gtos.setText(self.fsch.cmb_tipo_gtos.currentText()) 
+                    self.fsch.close()
+                    
+        elif self.fsch.radioButton_fechas.isChecked():
+            fecha_Ini=self.fsch.dateEdit_fecha_ini.date().toString("yyyy-MM-dd")
+            fecha_Fin=self.fsch.dateEdit_fecha_fin.date().toString("yyyy-MM-dd")
+            
+            if fecha_Ini > fecha_Fin or fecha_Fin < fecha_Ini:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Gastos x Fechas")
+                m.setText("Fechas incorrectas")
+                m.exec()
+            elif fecha_Ini == fecha_Fin:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Gastos x Fechas")
+                m.setText("Fechas iguales")
+                m.exec()    
+            else:
+                search=GastosDataGral()
+                data=search.get_info_xfechas(fecha_Ini,fecha_Fin)
+                self.frg.tblGastos.setRowCount(len(data))
+                fila=0
+                saldo=0
+                if data==[]:
+                    m=QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("Consultar Gastos x Fechas")
+                    m.setText("No hay informacion")
+                    m.exec()
+                else:
+                    for item in data:
+                        saldo += float(item[6])
+                        self.frg.txtTotal_g.setText(f"{saldo:,.2f}")
+                        
+                    for item in data:
+                        self.frg.tblGastos.setItem(fila,0,QTableWidgetItem(str(item[0])))
+                        self.frg.tblGastos.setItem(fila,1,QTableWidgetItem(item[1]))
+                        self.frg.tblGastos.setItem(fila,2,QTableWidgetItem(item[2]))
+                        self.frg.tblGastos.setItem(fila,3,QTableWidgetItem(item[3]))
+                        self.frg.tblGastos.setItem(fila,4,QTableWidgetItem(item[4]))
+                        self.frg.tblGastos.setItem(fila,5,QTableWidgetItem(item[5]))
+                        self.frg.tblGastos.setItem(fila,6,QTableWidgetItem(str(item[6])))
+                        self.frg.tblGastos.setItem(fila,7,QTableWidgetItem(item[7]))
+                        self.frg.tblGastos.setItem(fila,8,QTableWidgetItem(str(item[8])))
+                        self.frg.tblGastos.setItem(fila,9,QTableWidgetItem(str(item[9])))
+                        fila+=1
+                    self.frg.lbl_form_gtos.setText("Periodo")                
+                    self.frg.txt_form_gtos.setText(f" entre:  {fecha_Ini} y {fecha_Fin}") 
+                    self.fsch.close()
+                                
+        elif self.fsch.radioButton_emp.isChecked():
+            if self.fsch.cmb_empleados.currentIndex()==0:
+                m=QMessageBox()
+                m.setIcon(QMessageBox.Icon.Information)
+                m.setWindowTitle("Consultar Gastos")
+                m.setText("Selecciona una Opcion")
+                m.exec()
+            else:
+                search=GastosDataGral()
+                data=search.get_infox_empleado(self.fsch.cmb_empleados.currentText())
+                self.frg.tblGastos.setRowCount(len(data))
+                fila=0
+                saldo=0
+                if data==[]:
+                    m=QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("Consultar x Empledo")
+                    m.setText("No hay informacion")
+                    m.exec()
+                    self.fsch.cmb_empleados.setFocus()
+                else:
+                    
+                    for item in data:
+                        saldo += float(item[6])
+                        self.frg.txtTotal_g.setText(f"{saldo:,.2f}")
+                        
+                    for item in data:
+                        self.frg.tblGastos.setItem(fila,0,QTableWidgetItem(str(item[0])))
+                        self.frg.tblGastos.setItem(fila,1,QTableWidgetItem(item[1]))
+                        self.frg.tblGastos.setItem(fila,2,QTableWidgetItem(item[2]))
+                        self.frg.tblGastos.setItem(fila,3,QTableWidgetItem(item[3]))
+                        self.frg.tblGastos.setItem(fila,4,QTableWidgetItem(item[4]))
+                        self.frg.tblGastos.setItem(fila,5,QTableWidgetItem(item[5]))
+                        self.frg.tblGastos.setItem(fila,6,QTableWidgetItem(str(item[6])))
+                        self.frg.tblGastos.setItem(fila,7,QTableWidgetItem(item[7]))
+                        fila+=1
+                    self.frg.lbl_form_gtos.setText("Empleado")                
+                    self.frg.txt_form_gtos.setText(self.fsch.cmb_empleados.currentText()) 
+                    self.fsch.close()
+        else:
+            m=QMessageBox()
+            m.setIcon(QMessageBox.Icon.Information)
+            m.setWindowTitle("Consulta Gastos")
+            m.setText("Selecciona una opcion de busqueda")
+            m.exec()
+    
     def ex_form_fsch(self):
         self.fsch.close()    
     
@@ -2157,8 +2488,6 @@ class PantallaPrincipal():
         self.fcon=uic.loadUi(self.resource_path("gui/formEncontrar_ing.ui"))
         self.fcon.setWindowTitle("Opciones de Consulta")
         self.fcon.show()
-        self.list_cmb_clientes()    
-        self.fcon.radioButton_cliente.setChecked(True)
         self.fcon.lblCliente.setVisible(True)
         self.fcon.cmbCliente.setVisible(True)
         self.fcon.cmbCliente.setCurrentIndex(0)
@@ -2167,14 +2496,15 @@ class PantallaPrincipal():
         self.frexp.txtTotal.setText("") 
         self.frexp.lbl_form_flujo.setText("Cliente") 
         self.frexp.tblIngresos.clearContents()  
-        self.fcon.radioButton_tipo_ing.clicked.connect(self.opciones_consulta)
-        self.fcon.radioButton_cliente.clicked.connect(self.opciones_consulta)
-        self.fcon.radioButton_fechas.clicked.connect(self.opciones_consulta)
-        self.fcon.radioButton_tipo_cartera.clicked.connect(self.opciones_consulta)
-        self.fcon.btnConsultar.clicked.connect(self.mostrar_info)   
+        self.fcon.radioButton_tipo_ing.clicked.connect(self.opciones_consultaI)
+        self.fcon.radioButton_cliente.clicked.connect(self.opciones_consultaI)
+        self.fcon.radioButton_fechas.clicked.connect(self.opciones_consultaI)
+        self.fcon.radioButton_tipo_cartera.clicked.connect(self.opciones_consultaI)
+        self.fcon.btnConsultar.clicked.connect(self.mostrar_infoI)   
         self.fcon.btnSalir.clicked.connect(self.salir_form_consultar)
         
-    def opciones_consulta(self):
+    def opciones_consultaI(self):
+        #xcliente
         if  self.fcon.radioButton_cliente.isChecked():
             self.fcon.cmbCliente.setCurrentIndex(0)
             self.fcon.lblCliente.setVisible(True)
@@ -2242,10 +2572,12 @@ class PantallaPrincipal():
     def list_cmb_clientes(self):    
         search=ClientesData()
         data=search.lista_clientes()
+        self.fcon.cmbCliente.clear()
+        self.fcon.cmbCliente.addItem("---Selecciona una opcion---")
         for item in data:
             self.fcon.cmbCliente.addItem(item[1])
         
-    def mostrar_info(self):
+    def mostrar_infoI(self):
         if self.fcon.radioButton_cliente.isChecked():
             if self.fcon.cmbCliente.currentIndex()==0:
                 m=QMessageBox()
@@ -2411,7 +2743,14 @@ class PantallaPrincipal():
                     self.frexp.lbl_form_flujo.setText("Tipo Cartera")                
                     self.frexp.txt_form_flujo.setText(self.fcon.cmb_tipo_cartera.currentText()) 
                     self.fcon.close()                             
-    
+        else:
+            m=QMessageBox()
+            m.setIcon(QMessageBox.Icon.Information)
+            m.setWindowTitle("informacion Ingresos")
+            m.setText("Selecciona una opcion de busqueda")
+            m.exec()
+            
+            
     def eliminar_registro(self):
         selected_row = self.frexp.tblIngresos.currentRow()
         if selected_row == -1:
@@ -2492,77 +2831,7 @@ class PantallaPrincipal():
     def salir_form_consultar(self):    
         self.fcon.close() 
         
-        
-           
-            
-#########################################REGISTRO GASTOS############################################################               
-
-    def registrar_gasto(self):
-        m = QMessageBox()
-        m.setIcon(QMessageBox.Icon.Information)
-        m.setWindowTitle("Registro de Gasto")
-        m.setStandardButtons(QMessageBox.StandardButton.Ok)
-
-        if self.fexp.cmb_proveedor.currentIndex() == 0:
-            m.setText("Selecciona un proveedor")
-            self.fexp.cmbProveedor.setFocus()
-        elif self.fexp.txtImporte.text() == "":
-            m.setText("Captura el importe del gasto")
-            self.fexp.txtImporte.setFocus()
-        elif not self.fexp.txtImporte.text().replace('.', '', 1).isnumeric():
-            m.setText("Captura solo números en el importe")
-            self.fexp.txtImporte.setText("")
-            self.fexp.txtImporte.setFocus()
-        elif self.fexp.txtDescripcion.toPlainText() == "":
-            m.setText("Captura el concepto del gasto")
-            self.fexp.txtDescripcion.setFocus()
-        elif self.fexp.cmbFormaPago.currentIndex() == 0:
-            m.setText("Selecciona una forma de pago")
-            self.fexp.cmbFormaPago.setFocus()
-        elif self.fexp.cmbTipoGasto.currentIndex() == 0:
-            m.setText("Selecciona un tipo de gasto")
-            self.fexp.cmbTipoGasto.setFocus()
-        elif self.fexp.txtnFactura.text() == "":
-            m.setText("Captura el número de factura")
-            self.fexp.txtnFactura.setFocus()        
-        else:
-            regGasto = Reg_Gasto(
-                num_fact=self.fexp.txtnFactura.text().upper(),
-                n_proveedor=self.fexp.cmbProveedor.currentText(),
-                t_gasto=self.fexp.cmbTipoGasto.currentText(),
-                desc_gasto=self.fexp.txtDescripcion.toPlainText(),
-                f_pago=self.fexp.cmbFormaPago.currentText(),
-                n_cheque=self.fexp.txtn_cheque.text().upper(),
-                i_pago=float(self.fexp.txtImporte.text()),
-                iva_ret=float(self.fexp.txtIVA_ret.text()),
-                isr_ret=float(self.fexp.txtISR_ret.text()),
-                f_gasto=self.fexp.boxDate.date().toString("yyyy-MM-dd"),
-                usuario=self.pp.lblName_User.text(),
-                f_reg=current_datetime.strftime("%Y-%m-%d %H:%M:%S")
-                )
-            objData = RegGastoData()
-            if objData._registrar(info=regGasto):
-                m.setText("Gasto registrado con éxito")
-                self.limpiar_campos_fexp()
-            else:
-                m.setText("Error al registrar el gasto")
-                self.limpiar_campos_fexp()
-        m.exec()
-
-    def limpiar_campos_fexp(self):
-        self.fexp.cmbProveedor.setCurrentIndex(0)
-        self.fexp.txtnFactura.setText("")
-        self.fexp.cmbTipoGasto.setCurrentIndex(0)
-        self.fexp.txtDescripcion.setText("")
-        self.fexp.cmbFormaPago.setCurrentIndex(0)
-        self.fexp.txtn_cheque.setText("")
-        self.fexp.txtImporte.setText("")
-        self.fexp.txtIVA_ret.setText("")
-        self.fexp.txtISR_ret.setText("")
     
-    def salir_form_gastos(self):
-        self.fexp.close()
-
 ########################################ALTA PROVEEDOR/PRESTADOR SERVICIOS##########################################
     def abrir_form_alta_proveedor(self):
         #self.fprov = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegProveedor.ui"))
@@ -2600,7 +2869,7 @@ class PantallaPrincipal():
             m.setText("Captura solo números en el teléfono")
             self.fprov.txtTelefono.setText("")
             self.fprov.txtTelefono.setFocus()
-        elif self.fprov.Telefono.length() < 10:
+        elif len(self.fprov.txtTelefono.text()) < 10:
             m.setText("Captura un teléfono válido")
             self.fprov.txtTelefono.setText("55")
             self.fprov.txtTelefono.setFocus()    

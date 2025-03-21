@@ -143,7 +143,7 @@ border-radius:5px;</string>
       </property>
       <item>
        <property name="text">
-        <string>--seleccione una opcion--</string>
+        <string>---seleccione una opcion----</string>
        </property>
       </item>
      </widget>
@@ -422,7 +422,7 @@ border-radius:5px;</string>
    </property>
    <item>
     <property name="text">
-     <string>-selecciona una opcion-</string>
+     <string>----Selecciona una opcion----</string>
     </property>
    </item>
    <item>
@@ -466,7 +466,7 @@ border-radius:5px;</string>
    </property>
    <item>
     <property name="text">
-     <string>-selecciona una opcion-</string>
+     <string>----Selecciona una opcion----</string>
     </property>
    </item>
    <item>
