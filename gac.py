@@ -102,6 +102,7 @@ class PantallaPrincipal():
         self.pp.actionReporte_Ingresos.triggered.connect(self.abrir_form_reporte_ingresos)
         self.pp.actionReporte_Gastos.triggered.connect(self.abrir_form_rep_gastos)
         self.pp.actionIncrementar.triggered.connect(self.form_incre_cuotas)
+        self.pp.actionRegistro_O_Ingresos.triggered.connect(self.form_reg_Ogtos)
         self.pp.btnSalirPP.clicked.connect(self.salir_pp) 
     
     
@@ -2960,8 +2961,95 @@ class PantallaPrincipal():
               
     def salir_form_consultar(self):    
         self.fcon.close() 
-        
+
+##############################################REGISTRO OTROS INGRESOS###########################################################        
+
+    def form_reg_Ogtos(self):
+        self.froig=uic.loadUi(self.resource_path("gui/formRegOIng.ui"))
+        self.froig.setWindowTitle("Registro otros Ingresos")
+        self.froig.show()
+        self.set_cmb_ctaD()
+        self.froig.btnRegistrar.clicked.connect(self.registrar_Oingresos)
+        self.froig.btnSalir.clicked.connect(self.salir_form_froig)
     
+    def set_cmb_ctaD(self):
+        obj=ctasbancos.CuentasData()
+        datos=obj.lista_ctas()
+        for item in datos:
+            self.froig.cmb_cuenta.addItem(item[2])          
+       
+    def registrar_Oingresos(self):
+        m = QMessageBox()
+        m.setIcon(QMessageBox.Icon.Information)
+        m.setWindowTitle("Registro Otros Ingresos")
+        m.setStandardButtons(QMessageBox.StandardButton.Ok)
+
+        if self.froig.txt_razon_soc.text() == "":
+            m.setText("Captura el nombre del cliente")
+            self.froig.txt_razon_soc.setFocus()
+        elif self.froig.txt_doc.text() == "":
+            m.setText("Captura el documento del ingreso")
+            self.froig.txt_doc.setFocus()
+        elif self.froig.cmb_tIng.currentIndex()==0:
+            m.setText("Selecciona el tipo de ingreso")
+            self.froig.cmb_tIng.setFocus()
+        elif self.froig.txtDescripcion.toPlainText() == "":
+            m.setText("Captura la descripción del ingreso")
+            self.froig.txtDescripcion.setFocus()
+        elif self.froig.txtImporte.text() == "":
+            m.setText("Captura el importe del ingreso")
+            self.froig.txtImporte.setFocus()
+        elif not self.froig.txtImporte.text().replace('.', '', 1).isnumeric():
+            m.setText("Captura solo números en el importe")
+            self.froig.txtImporte.setText("")
+            self.froig.txtImporte.setFocus()
+        elif self.froig.cmb_fpago.currentIndex() == 0:
+            m.setText("Selecciona una forma de pago")
+            self.froig.cmb_fpago.setFocus()
+        elif self.froig.cmb_cuenta.currentIndex() == 0:
+            m.setText("Selecciona una cuenta bancaria")
+            self.froig.cmb_cuenta.setFocus()
+        else:
+            regIngreso = Reg_Cartera(
+                local_o_area="",
+                clienteFact=self.froig.txt_razon_soc.text().upper(),
+                tipoCartera="otros ingresos",
+                tipoCuota=self.froig.cmb_tIng.currentText(),
+                tipo_factura="pago",
+                numFact=self.froig.txt_doc.text().upper(),
+                importeAdeudo=0,
+                importePago=float(self.froig.txtImporte.text()),
+                fPago_Cobro=self.froig.boxDate.date().toString("yyyy-MM-dd"),
+                ctaBanco=self.froig.cmb_cuenta.currentText(),
+                formaPago=self.froig.cmb_fpago.currentText(),
+                cheque="",
+                numContrato="",
+                statusPago="",
+                usuario=self.pp.lblName_User.text(),
+                fechaReg=current_datetime.strftime("%Y-%m-%d %H:%M:%S"),
+                comentarios=self.froig.txtDescripcion.toPlainText()
+            )
+            objData = RegCarteraData()
+            if objData._registrar(info=regIngreso):
+                m.setText("Ingreso registrado con éxito")
+                self.limpiar_campos_froig()
+            else:
+                m.setText("Error al registrar el ingreso")
+                self.limpiar_campos_froig()
+        m.exec()
+
+    def limpiar_campos_froig(self):
+        self.froig.txtDescripcion.setText("")
+        self.froig.txtImporte.setText("")
+        self.froig.cmb_fpago.setCurrentIndex(0)
+        self.froig.cmb_cuenta.setCurrentIndex(0)
+        self.froig.txt_razon_soc.setText("")
+        self.froig.cmb_tIng.setCurrentIndex(0)
+        self.froig.txt_doc.setText("")
+                    
+    def salir_form_froig(self):    
+        self.froig.close()
+        
 ########################################ALTA PROVEEDOR/PRESTADOR SERVICIOS##########################################
     def abrir_form_alta_proveedor(self):
         #self.fprov = uic.loadUi(self.resource_path("C:/Users/smart/OneDrive/Escritorio/gac_py_V1.02/gui/formRegProveedor.ui"))
@@ -3234,6 +3322,12 @@ class PantallaPrincipal():
         
     def salir_form_finc(self):
         self.finc.close()
+
+
+
+
+
+
     
 if __name__ == "__main__":
     app = QApplication(sys.argv)
