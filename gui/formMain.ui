@@ -642,7 +642,7 @@ border-radius:5px;</string>
      <x>0</x>
      <y>0</y>
      <width>1132</width>
-     <height>24</height>
+     <height>27</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -653,9 +653,13 @@ border-radius:5px;</string>
    </property>
    <property name="font">
     <font>
-     <family>Goudy Old Style</family>
-     <pointsize>12</pointsize>
-     <bold>true</bold>
+     <family>Comic Sans MS</family>
+     <pointsize>11</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+     <stylestrategy>PreferAntialias</stylestrategy>
+     <kerning>false</kerning>
+     <hintingpreference>PreferFullHinting</hintingpreference>
     </font>
    </property>
    <property name="cursor">
@@ -669,8 +673,13 @@ border-radius:5px;</string>
    </property>
    <property name="styleSheet">
     <string notr="true">background-color: rgb(7, 12, 88);
-
 color: rgb(255, 255, 255);</string>
+   </property>
+   <property name="defaultUp">
+    <bool>false</bool>
+   </property>
+   <property name="nativeMenuBar">
+    <bool>true</bool>
    </property>
    <widget class="QMenu" name="menuLocales_Comerciales">
     <property name="title">
@@ -698,10 +707,9 @@ color: rgb(255, 255, 255);</string>
    </widget>
    <widget class="QMenu" name="menuActualizar_Cuotas">
     <property name="title">
-     <string>Actualizar Cuotas</string>
+     <string>Cuotas</string>
     </property>
-    <addaction name="actionLocales_Comerciales"/>
-    <addaction name="actionAreas_Comunes"/>
+    <addaction name="actionIncrementar"/>
    </widget>
    <widget class="QMenu" name="menuGastos_Egresos">
     <property name="title">
@@ -993,6 +1001,11 @@ color: rgb(255, 255, 255);</string>
   <action name="actionCarga_Empleados">
    <property name="text">
     <string>Carga Empleados</string>
+   </property>
+  </action>
+  <action name="actionIncrementar">
+   <property name="text">
+    <string>Incrementar</string>
    </property>
   </action>
  </widget>

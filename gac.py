@@ -9,6 +9,7 @@ from data.cartera import CarteraDataAC, CarteraDataCM, CarteraDataGral
 from data.clientes import BuscarCliente, ClientesData
 from data.contratos import ContratosData
 from data.editcontrato import EditContratoData
+#from data.editcuotas import CuotasDataGral
 from data.facturas import FacturasData
 from data.periodo import PeriodosCargaData
 from data.regareac import RegACData
@@ -100,7 +101,7 @@ class PantallaPrincipal():
         self.pp.actionAlta_Empleado.triggered.connect(self.abrir_form_alta_empleado)
         self.pp.actionReporte_Ingresos.triggered.connect(self.abrir_form_reporte_ingresos)
         self.pp.actionReporte_Gastos.triggered.connect(self.abrir_form_rep_gastos)
-        self.pp.actionLocales_Comerciales.triggered.connect(self.form_incre_cuotas)
+        self.pp.actionIncrementar.triggered.connect(self.form_incre_cuotas)
         self.pp.btnSalirPP.clicked.connect(self.salir_pp) 
     
     
@@ -1524,7 +1525,7 @@ class PantallaPrincipal():
         
     def set_cmb_ac(self):
         obj=ListaAreasData()
-        datos=obj.lista_areas_reg_cont()   
+        datos=obj.lista_areasC()   
         for item in datos:
             self.fcon.cmbAreaComun.addItem(item[1])
        
@@ -3157,8 +3158,82 @@ class PantallaPrincipal():
         self.finc=uic.loadUi(self.resource_path("gui/formIncreCuotas.ui"))
         self.finc.setWindowTitle("Actualizar Cuotas")
         self.finc.show()
+        self.finc.txt_porcentaje.setText("0.00")    
+        self.finc.btnEjecutar.clicked.connect(self.incremento_masivo_cuotas)
+        self.finc.btnSalir.clicked.connect(self.salir_form_finc)
 
-
+    def incremento_masivo_cuotas(self):
+        if self.finc.cmb_tcuota.currentIndex()==0:
+            m=QMessageBox()
+            m.setIcon(QMessageBox.Icon.Information)
+            m.setWindowTitle("Incremento Cuotas")
+            m.setText("Selecciona una opcion")
+            m.exec()
+        elif self.finc.txt_porcentaje.text() == "" or float(self.finc.txt_porcentaje.text()) <= 0:
+            m=QMessageBox()
+            m.setIcon(QMessageBox.Icon.Information)
+            m.setWindowTitle("Incremento Cuotas")
+            m.setText("Captura un porcentaje")
+            self.finc.txt_porcentaje.setFocus()
+            m.exec()
+        elif not self.finc.txt_porcentaje.text().replace(".","",1).isnumeric():
+            m=QMessageBox()
+            m.setIcon(QMessageBox.Icon.Information)
+            m.setWindowTitle("Incremento Cuotas")
+            m.setText("Captura un porcentaje correcto")
+            self.finc.txt_porcentaje.setText("0.00")
+            self.finc.txt_porcentaje.setFocus()
+            m.exec()
+        else:
+            if self.finc.cmb_tcuota.currentIndex()==1:  
+                porcentaje_inc=float(self.finc.txt_porcentaje.text())
+                objData = UbicacionesData()
+                data = objData.lista_ubicaciones()
+                for item in data:
+                    cuota = round(float(item[3]),2)
+                    cuota_inc = round(cuota + (cuota * porcentaje_inc / 100),2)
+                    objData.update_cuotas_locales(item[1], cuota_inc)
+                    
+                if objData.update_cuotas_locales(item[1],cuota_inc):
+                    m = QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("Incremento Cuotas")
+                    m.setText("Cuotas incrementadas con éxito")
+                    m.exec()
+                    self.finc.cmb_tcuota.setCurrentIndex(0)
+                    self.finc.txt_porcentaje.setText("0.00")    
+                else:
+                    m = QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Critical)
+                    m.setWindowTitle("Incremento Cuotas")
+                    m.setText("Error al incrementar cuotas")
+                    m.exec()
+            else:
+                porcentaje_inc=float(self.finc.txt_porcentaje.text())
+                objData = ListaAreasData()
+                data = objData.lista_areasC()
+                for item in data:
+                    cuota = round(float(item[3]),2)
+                    cuota_inc = round(cuota + (cuota * porcentaje_inc / 100),2)
+                    objData.update_cuotas_areas(item[1], cuota_inc)
+                    
+                if objData.update_cuotas_areas(item[1],cuota_inc):
+                    m = QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Information)
+                    m.setWindowTitle("Incremento Cuotas")
+                    m.setText("Cuotas incrementadas con éxito")
+                    m.exec()
+                    self.finc.cmb_tcuota.setCurrentIndex(0)
+                    self.finc.txt_porcentaje.setText("0.00")    
+                else:
+                    m = QMessageBox()
+                    m.setIcon(QMessageBox.Icon.Critical)
+                    m.setWindowTitle("Incremento Cuotas")
+                    m.setText("Error al incrementar cuotas")
+                    m.exec()
+        
+    def salir_form_finc(self):
+        self.finc.close()
     
 if __name__ == "__main__":
     app = QApplication(sys.argv)
