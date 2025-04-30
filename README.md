@@ -1,7 +1,7 @@
 
 GESTOR ADMINISTRATIVO CONDOMINAL
 
-Este proyecto fue consevido y diseñado para cubrir los procesos administrativos que una empresa necesita para realizar las tarea y actividades propias del negocio inmobiliario.
+Este proyecto fue concebido y diseñado para cubrir los procesos administrativos que una empresa necesita para realizar las tarea y actividades propias del negocio inmobiliario.
 
 El gestor esta desarrollado para administrar y controlar  dos TIPOS DE CARTERA o de cuentas por cobrar:
 
